@@ -9,9 +9,22 @@
 
       const url = "http://localhost:5000/";
 
+
+      function formSubmitHandler(e) {
+        e.preventDefault();
+        if (e.target.id == "artist"){
+        getArtist(e.target);
+        }
+        if (e.target.id == "genre"){
+        getGenre(e.target);
+        }
+      }
+      
       //grab artist
       function getArtist(form)
       {
+        console.log("sldkfjskldf")
+        console.log(form.part_1.value)
           if(form.part_1.value != "") {
               userData.artist = form.part_1.value
               fetchOptions.body = JSON.stringify(userData);
@@ -25,6 +38,23 @@
               }
       }
 
+      //get Genre
+      function getGenre(form)
+      {
+        console.log("sldkfjskldf")
+        console.log(form.part_1.value)
+          if(form.part_1.value != "") {
+              userData.artist = form.part_1.value
+              fetchOptions.body = JSON.stringify(userData);
+              fetch("http://localhost:5000/artist_1/", fetchOptions)
+              .then((result)=>{
+                  return result.json();
+                }).then((data)=>{
+              });}
+              else {
+                  alert("Error: Please check that you've entries in all text boxes");
+              }
+      }
 
       function checkThree(form)
     {
