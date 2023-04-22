@@ -28,7 +28,7 @@
           if(form.part_1.value != "") {
               userData.artist = form.part_1.value
               fetchOptions.body = JSON.stringify(userData);
-              fetch("http://localhost:5000/artist_1/", fetchOptions)
+              fetch("http://localhost:5000/artist?part_1=" + form.part_1.value, fetchOptions)
               .then((result)=>{
                   return result.json();
                 }).then((data)=>{
@@ -46,7 +46,7 @@
           if(form.part_1.value != "") {
               userData.genre = form.part_1.value
               fetchOptions.body = JSON.stringify(userData);
-              fetch("http://localhost:5000/genre_1/", fetchOptions)
+              fetch("http://localhost:5000/genre?part_1="+form.part_1.value, fetchOptions)
               .then((result)=>{
                   return result.json();
                 }).then((data)=>{
