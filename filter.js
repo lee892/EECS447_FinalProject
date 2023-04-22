@@ -7,10 +7,26 @@
         }),
       }
 
-      const url = "http://localhost:5050/users";
+      const url = "http://localhost:5000/";
+
+      //grab artist
+      function getArtist(form)
+      {
+          if(form.part_1.value != "") {
+              userData.artist = form.part_1.value
+              fetchOptions.body = JSON.stringify(userData);
+              fetch("http://localhost:5000/artist_1/", fetchOptions)
+              .then((result)=>{
+                  return result.json();
+                }).then((data)=>{
+              });}
+              else {
+                  alert("Error: Please check that you've entries in all text boxes");
+              }
+      }
 
 
-    function checkThree(form)
+      function checkThree(form)
     {
         if(form.part_1.value != "" && form.part_2.value != "") {
             userData.value1 = form.part_1.value
@@ -26,11 +42,12 @@
             }
     }
 
-
+/*
     function creatediv(choice){
         if (choice ==1)
+            console.log("do nothing")
     }
-
+*/
 
 
     
