@@ -2,6 +2,7 @@ from flask import Flask,render_template, request
 from flask_mysqldb import MySQL
 import mysql.connector
 import json
+from flask_cors import CORS
  
 app = Flask(__name__)
  
@@ -11,7 +12,7 @@ app.config['MYSQL_PASSWORD'] = 'password'
 app.config['MYSQL_DB'] = 'SpotifyDB'
  
 mysql = MySQL(app)
-
+CORS(app)
 @app.route('/', methods = ['GET'])
 def getArtists():
     args = request.args
@@ -69,7 +70,7 @@ def query_three():
 #         name = request.form['name']
 #         age = request.form['age']
 #         cursor = mysql.connection.cursor()
-#         cursor.execute(''' INSERT INTO info_table VALUES(%s,%s)''',(name,age))
+#         cursor.execute(''' INSERT INTO Track VALUES(%s,%s)''',(name,age))
 #         mysql.connection.commit()
 #         cursor.close()
 #         return f"Done!!"
