@@ -74,7 +74,7 @@ def query_four():
     cursor.close()
     return f"Track Added."
 
-@app.route('/login', methods = ['DELETE'])
+@app.route('/query5', methods = ['DELETE'])
 def query_five():
     args = request.args
     track_name = args.get('trackName')
