@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Spotify</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="filter.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <button class="button" type="button" onclick="choice1()" style="margin: 6px 12px">Choice 1</button>
+    <button class="button" type="button" onclick="choice2()" style="margin: 6px 12px">Choice 2</button>
+    <button class="button" type="button" onclick="choice3()" style="margin: 6px 12px">Choice 3</button>
+    <button class="button" type="button" onclick="choice4()" style="margin: 6px 12px">Choice 4</button>
+    <button class="button" type="button" onclick="choice5()" style="margin: 6px 12px">Choice 5</button>
+
+    <div id="firstChoice"  style="display:none;">
+
+        <img src="https://i.kym-cdn.com/photos/images/original/001/175/384/e1a.png"> 
+    
+    </div>
+
+    <div id="secondChoice"  style="display:none;">
+
+        <img src="https://thepinknews.com/wp-content/uploads/2021/03/pepe-hands-1024x607.png"> 
+        
+    </div>
+
+    <div id="thirdChoice"  style="display:none;">
+        </form onsubmit="event.preventDefault(); checkThree()">
+        <p>Attribute 1 of Choice 3<input id="submit1" name="part_1"></p>
+        <p>Attribute 2 of Choice 3<input id="submit2" name="part_2"></p>
+        <button>Submit</button>
+        </form>
+    </div>
+
+    <div id="fourthChoice"  style="display:none;">
+        <form onsubmit="event.preventDefault(); checkThree()">
+        <p>Attribute 1 of Choice 4<input name="part_3"></p>
+        <p>Attribute 2 of Choice 4<input  name="part_4"></p>
+        <button onclick="checkFour(form)">Submit</button>
+        </form>
+    </div>
+
+    <div id="fifthChoice"  style="display:none;">
+        <form onsubmit="event.preventDefault(); checkThree()">
+        <p>Attribute 1 of Choice 5<input name="part_5"></p>
+        <p>Attribute 2 of Choice 5<input  name="part_6"></p>
+        <button onclick="checkFive(form)">Submit</button>
+        <form>
+    </div>
+
+</body>
+
+</html>
