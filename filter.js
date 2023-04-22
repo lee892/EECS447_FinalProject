@@ -18,6 +18,9 @@
         if (e.target.id == "genre"){
         getGenre(e.target);
         }
+        if (e.target.id == "artists"){
+        getArtists(e.target);
+        }
       }
 
       //grab artist
@@ -56,6 +59,24 @@
               }
       }
 
+      //get artists
+      function getArtists(form)
+      {
+        console.log("getArtists Function")
+        console.log(form.part_1.value)
+          if(form.part_1.value != "") {
+              userData.artist1 = form.part_1.value
+              userData.artist2 = form.part_2.value
+              fetchOptions.body = JSON.stringify(userData);
+              fetch("http://localhost:5000/path?artist1="+form.part_1.value+"&&artist2"+form.part_2.value, fetchOptions)
+              .then((result)=>{
+                  return result.json();
+                }).then((data)=>{
+              });}
+              else {
+                  alert("Error: Please check that you've entries in all text boxes");
+              }
+      }
     //   function checkThree(form)
     // {
     //     if(form.part_1.value != "" && form.part_2.value != "") {
