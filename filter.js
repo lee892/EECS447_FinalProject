@@ -56,21 +56,21 @@
               }
       }
 
-      function checkThree(form)
-    {
-        if(form.part_1.value != "" && form.part_2.value != "") {
-            userData.value1 = form.part_1.value
-            userData.value2 = form.part_2.value
-            fetchOptions.body = JSON.stringify(userData);
-            fetch("http://localhost:5000/query3/", fetchOptions)
-            .then((result)=>{
-                return result.json();
-              }).then((data)=>{
-            });}
-            else {
-                alert("Error: Please check that you've entries in all text boxes");
-            }
-    }
+    //   function checkThree(form)
+    // {
+    //     if(form.part_1.value != "" && form.part_2.value != "") {
+    //         userData.value1 = form.part_1.value
+    //         userData.value2 = form.part_2.value
+    //         fetchOptions.body = JSON.stringify(userData);
+    //         fetch("http://localhost:5000/query3/", fetchOptions)
+    //         .then((result)=>{
+    //             return result.json();
+    //           }).then((data)=>{
+    //         });}
+    //         else {
+    //             alert("Error: Please check that you've entries in all text boxes");
+    //         }
+    // }
 
 /*
     function creatediv(choice){
