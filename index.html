@@ -21,13 +21,19 @@
 
     <div id="firstChoice"  style="display:none;">
 
-        <img src="https://i.kym-cdn.com/photos/images/original/001/175/384/e1a.png"> 
-    
+    </form onsubmit="event.preventDefault(); getArtist()">
+    <p>Please input Artist<input name="part_1"></p>
+    <button>Submit</button>
+    </form>
+
     </div>
 
     <div id="secondChoice"  style="display:none;">
-
-        <img src="https://thepinknews.com/wp-content/uploads/2021/03/pepe-hands-1024x607.png"> 
+    </form onsubmit="event.preventDefault(); checkTwo()">
+    <p>Attribute 1 of Choice 3<input id="submit1" name="part_1"></p>
+    <p>Attribute 2 of Choice 3<input id="submit2" name="part_2"></p>
+    <button>Submit</button>
+    </form>
         
     </div>
 
