@@ -64,11 +64,12 @@
       {
         console.log("getArtists Function")
         console.log(form.part_1.value)
+        console.log(form.part_2.value)
           if(form.part_1.value != "") {
               userData.artist1 = form.part_1.value
               userData.artist2 = form.part_2.value
               fetchOptions.body = JSON.stringify(userData);
-              fetch("http://localhost:5000/path?artist1="+form.part_1.value+"&&artist2"+form.part_2.value, fetchOptions)
+              fetch("http://localhost:5000/path?artist1="+form.part_1.value+"&&artist2="+form.part_2.value, fetchOptions)
               .then((result)=>{
                   return result.json();
                 }).then((data)=>{
@@ -77,28 +78,7 @@
                   alert("Error: Please check that you've entries in all text boxes");
               }
       }
-    //   function checkThree(form)
-    // {
-    //     if(form.part_1.value != "" && form.part_2.value != "") {
-    //         userData.value1 = form.part_1.value
-    //         userData.value2 = form.part_2.value
-    //         fetchOptions.body = JSON.stringify(userData);
-    //         fetch("http://localhost:5000/query3/", fetchOptions)
-    //         .then((result)=>{
-    //             return result.json();
-    //           }).then((data)=>{
-    //         });}
-    //         else {
-    //             alert("Error: Please check that you've entries in all text boxes");
-    //         }
-    // }
-
-/*
-    function creatediv(choice){
-        if (choice ==1)
-            console.log("do nothing")
-    }
-*/
+    
 
 
     
