@@ -23,8 +23,8 @@ try:
         sqlFile = fd.read()
         fd.close()
 
-        # all SQL commands (split on ';')
-        sqlCommands = sqlFile.split(';')
+        # all SQL commands (split on ";")
+        sqlCommands = sqlFile.split(";")
 
         # Execute every command from the input file
         for command in sqlCommands:
@@ -32,11 +32,12 @@ try:
             # For example, if the tables do not yet exist, this will skip over
             # the DROP TABLE commands
             try:
-                c.execute(command)
-            except OperationalError, msg:
+                with connection.cursor() as cursor:
+                    cursor.execute(command)
+            except (OperationalError, msg):
                 print("Command skipped: ", msg)
-        with connection.cursor() as cursor:
-            cursor.execute(create_db_query)
+        # with connection.cursor() as cursor:
+        #     cursor.execute(create_db_query)
 except Error as e:
     print(e)
 
