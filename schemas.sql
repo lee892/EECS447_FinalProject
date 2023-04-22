@@ -58,6 +58,15 @@ CREATE TABLE IF NOT EXISTS Img (
     uri VARCHAR(255)
 );
 
+CREATE TABLE IF NOT EXISTS availableMarkets (
+
+);
+
+CREATE TABLE IF NOT EXISTS Genre (
+    id INT NOT NULL PRIMARY KEY,
+    genreName VARCHAR(50),
+);
+
 -- CREATE TABLE IF NOT EXISTS Playlist (
 --     id INT NOT NULL PRIMARY KEY,
 --     playlistName VARCHAR(255),
@@ -67,10 +76,9 @@ CREATE TABLE IF NOT EXISTS Img (
 --     uri INT,
 -- );
 
-
 --Relationship tables
 
-CREATE TABLE IF NOT EXISTS artistToAlbums (
+CREATE TABLE IF NOT EXISTS artistsToAlbums (
     id INT NOT NULL PRIMARY KEY,
     artistId INT REFERENCES Artist(id),
     albumId INT REFERENCES Album(id)
@@ -79,8 +87,14 @@ CREATE TABLE IF NOT EXISTS artistToAlbums (
 CREATE TABLE IF NOT EXISTS albumsToTracks (
     id INT NOT NULL PRIMARY KEY,
     albumId INT REFERENCES Album(id),
-    artistId INT REFERENCES Artist(id)
+    trackId INT REFERENCES Track(id)
 )
+
+CREATE TABLE IF NOT EXISTS albumsToGenre (
+    id INT NOT NULL PRIMARY KEY,
+    albumId INT REFERENCES Album(id),
+    genreId INT REFERENCES Genre(id)
+);
 
 -- CREATE TABLE IF NOT EXISTS playlistsToTracks (
 --     id INT NOT NULL PRIMARY KEY,
