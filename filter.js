@@ -19,11 +19,11 @@
         getGenre(e.target);
         }
       }
-      
+
       //grab artist
       function getArtist(form)
       {
-        console.log("sldkfjskldf")
+        console.log("getArtist Function")
         console.log(form.part_1.value)
           if(form.part_1.value != "") {
               userData.artist = form.part_1.value
@@ -41,12 +41,12 @@
       //get Genre
       function getGenre(form)
       {
-        console.log("sldkfjskldf")
+        console.log("getGenre Function")
         console.log(form.part_1.value)
           if(form.part_1.value != "") {
-              userData.artist = form.part_1.value
+              userData.genre = form.part_1.value
               fetchOptions.body = JSON.stringify(userData);
-              fetch("http://localhost:5000/artist_1/", fetchOptions)
+              fetch("http://localhost:5000/genre_1/", fetchOptions)
               .then((result)=>{
                   return result.json();
                 }).then((data)=>{
