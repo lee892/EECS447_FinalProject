@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS Artist (
     artistId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     artistName VARCHAR(255),
     followerCount INT,
-    --genre is a many-to-many relationship table
+    -- genre is a many-to-many relationship table
     artist VARCHAR(255),
     popularity INT,
     uri VARCHAR(255),

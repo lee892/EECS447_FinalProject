@@ -16,10 +16,10 @@ mysql = MySQL(app)
 def getArtists():
     args = request.args
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT * FROM Artist; ''')
+    cursor.execute(" SELECT * FROM Artist; ")
     data = cursor.fetchall()
     cursor.close()
-    res = {"name": [x[0] for x in data]}
+    res = {"name": [x[1] for x in data]}
     return json.dumps(res)
 
 @app.route('/query1', methods = ['GET'])
@@ -27,9 +27,12 @@ def query_one():
     args = request.args
     artist = args.get('artist')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT artistName FROM Track NATURAL JOIN albumsToTracks NATURAL JOIN artistsToAlbums Natural JOIN Artist
-                    WHERE artistName = %s;''',(artist))
+    cursor.execute(''' SSELECT artistName FROM Track 
+	NATURAL JOIN albumsToTracks NATURAL JOIN artistsToAlbums
+	INNER JOIN Artist ON 
+	artistsToAlbums.artistId=Artist.artistId WHERE artistName = %s;''',(artist,))
     data = cursor.fetchall()
+    print(data)
     cursor.close()
     res = {"name": [x[0] for x in data]}
     return json.dumps(res)
@@ -40,7 +43,7 @@ def query_two():
     genre = args.get('genre')
     cursor = mysql.connection.cursor()
     cursor.execute(''' SELECT albumName FROM Genre NATURAL JOIN albumsToGenre Natural JOIN Album
-                    WHERE genreName = %s ;''',(genre))
+                    WHERE genreName = %s ;''',(genre,))
     data = cursor.fetchall()
     cursor.close()
     res = {"name": [x[0] for x in data]}
@@ -65,11 +68,11 @@ def query_three():
 def query_four():
     #{id: 0, name: "ronald "}
     body = request.json
-    name = body.name
+    name = body["name"]
     # print(type(body))
-    # print(body)
+    print(name)
     cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO Track VALUES(%s)''',(name))
+    cursor.execute(''' INSERT INTO Track (trackName) VALUES(%s)''', (name,))
     mysql.connection.commit()
     cursor.close()
     return f"Track Added."
@@ -79,7 +82,9 @@ def query_five():
     args = request.args
     track_name = args.get('trackName')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' Delete FROM Track Where trackName = %s; '''(track_name))
+    print(track_name)
+    cursor.execute(''' DELETE FROM Track Where trackName = %s ''', (track_name,))
+    mysql.connection.commit()
     cursor.close()
     return f"Track Deleted."
     
