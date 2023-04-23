@@ -2,13 +2,19 @@ from flask import Flask,render_template, request
 from flask_mysqldb import MySQL
 import mysql.connector
 import json
- 
+import os
+import dotenv
+from init import initDB
+
+dotenv.load_dotenv()
+initDB()
+
 app = Flask(__name__)
  
-app.config['MYSQL_HOST'] = '127.0.0.1'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'password'
-app.config['MYSQL_DB'] = 'SpotifyDB'
+app.config['MYSQL_HOST'] = os.environ["DB_HOSTNAME"]
+app.config['MYSQL_USER'] = os.environ["DB_USER"]
+app.config['MYSQL_PASSWORD'] = os.environ["DB_PASSWORD"]
+app.config['MYSQL_DB'] = os.environ["DB_NAME"]
  
 mysql = MySQL(app)
 
@@ -83,5 +89,5 @@ def query_five():
     cursor.close()
     return f"Track Deleted."
     
- 
-app.run(host='0.0.0.0', port=5000)
+
+app.run(host='localhost', port=5000)
