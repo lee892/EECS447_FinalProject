@@ -40,9 +40,12 @@
         console.log("getArtist Function")
         console.log(form.part_1.value)
           if(form.part_1.value != "") {
-              userData.artist = form.part_1.value
+              userData.artist = form.part_1.value;
+              let temp = form.part_1.value;
+              let tempCleaned = temp.replace(/\s/g, '%20')
               fetchOptions.body = JSON.stringify(userData);
-              fetch("http://localhost:5000/path?artist=" + form.part_1.value, fetchOptions)
+              console.log("http://localhost:5000/query1?artist=" + tempCleaned);
+              fetch("http://localhost:5000/query1?artist=" + tempCleaned, fetchOptions)
               .then((result)=>{
                   return result.json();
                 }).then((data)=>{
@@ -58,9 +61,12 @@
         console.log("getGenre Function")
         console.log(form.part_1.value)
           if(form.part_1.value != "") {
-              userData.genre = form.part_1.value
+              userData.genre = form.part_1.value;
+              let temp = form.part_1.value;
+              let tempCleaned = temp.replace(/\s/g, '%20');
               fetchOptions.body = JSON.stringify(userData);
-              fetch("http://localhost:5000/path?genre="+form.part_1.value, fetchOptions)
+              console.log("http://localhost:5000/query2?genre="+tempCleaned);
+              fetch("http://localhost:5000/path?query2="+tempCleaned, fetchOptions)
               .then((result)=>{
                   return result.json();
                 }).then((data)=>{
@@ -77,10 +83,15 @@
         console.log(form.part_1.value)
         console.log(form.part_2.value)
           if(form.part_1.value != "") {
-              userData.artist1 = form.part_1.value
-              userData.artist2 = form.part_2.value
+              userData.artist1 = form.part_1.value;
+              userData.artist2 = form.part_2.value;
+              let temp1 = form.part_1.value;
+              let temp1Cleaned = temp1.replace(/\s/g, '%20');
+              let temp2 = form.part_2.value;
+              let temp2Cleaned = temp2.replace(/\s/g, '%20');              
               fetchOptions.body = JSON.stringify(userData);
-              fetch("http://localhost:5000/path?artist1="+form.part_1.value+"&&artist2="+form.part_2.value, fetchOptions)
+              console.log("http://localhost:5000/query3?artist1="+temp1Cleaned+"&artist2="+temp2Cleaned);
+              fetch("http://localhost:5000/query3?artist1="+temp1Cleaned+"&artist2="+temp2Cleaned, fetchOptions)
               .then((result)=>{
                   return result.json();
                 }).then((data)=>{
@@ -139,7 +150,7 @@
 
 
 
-      
+
     function choice1(){
         document.getElementById('firstChoice').style.display = "block";
         document.getElementById('secondChoice').style.display = "none";
