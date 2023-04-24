@@ -1,7 +1,11 @@
+ //filter.js is the front end driver file that is invoked from the index.html file.
+ 
+ //initilizaing empty objects for json  
  let userData = {}
  let deleteData = {}
  let putData = {}
 
+    //post method
     var fetchOptions = {
         method: "POST",
         headers: new Headers({
@@ -9,6 +13,7 @@
         }),
       }
 
+      //delete method
       var deleteOption = {
         method: "DELETE",
         headers: new Headers({
@@ -16,6 +21,7 @@
         }),
       };
     
+      //put methdod
       var putOptions = {
         method: "PUT",
         headers: new Headers({
@@ -23,10 +29,13 @@
         }),
       };
 
-      const url = "http://localhost:5000/";
+      // unused const url = "http://localhost:5000/";
 
-
-      function formSubmitHandler(e) {
+      /*
+      called from the html which then sends it to respective
+      function that handles the values within the e.target
+      */
+     function formSubmitHandler(e) {
         e.preventDefault();
         if (e.target.id == "artist"){
         getArtist(e.target);
