@@ -31,21 +31,25 @@
         if (e.target.id == "artist"){
         getArtist(e.target);
         }
-        if (e.target.id == "genre"){
+        else if (e.target.id == "genre"){
         getGenre(e.target);
         }
-        if (e.target.id == "artists"){
+        else if (e.target.id == "artists"){
         getArtists(e.target);
         }
-        if (e.target.id =="addSong"){
+        else if (e.target.id =="addSong"){
         putSong(e.target);
         }
-        if (e.target.id == "deleteSong"){
+        else if (e.target.id == "deleteSong"){
         deleteSong(e.target);
         }
       }
 
       //grab artist
+      /*
+      grabs the values of the text boxes, inserts %20 if there are space values and then makes 
+      a fetch request to grab songs from an artist
+      */
       function getArtist(form)
       {
         console.log("getArtist Function")
@@ -67,6 +71,10 @@
       }
 
       //get Genre
+      /*
+      grabs the values of the text boxes, inserts %20 if there are space values and then makes 
+      a fetch request to grab songs based on Genre
+      */
       function getGenre(form)
       {
         console.log("getGenre Function")
@@ -88,12 +96,16 @@
       }
 
       //get artists
+      /*
+      grabs the values of the text boxes, inserts %20 if there are space values and then makes 
+      a fetch request to grab songs based on both artist criteria
+      */
       function getArtists(form)
       {
-        console.log("getArtists Function")
-        console.log(form.part_1.value)
-        console.log(form.part_2.value)
-          if(form.part_1.value != "") {
+        console.log("getArtists Function");
+        console.log(form.part_1.value);
+        console.log(form.part_2.value);
+          if(form.part_1.value != ""&&form.part_2.value != "") {
               userData.artist1 = form.part_1.value;
               userData.artist2 = form.part_2.value;
               let temp1 = form.part_1.value;
@@ -113,13 +125,17 @@
       }
     
       //place a song
+      /*
+      grabs the values of the text boxes, inserts %20 if there are space values and then makes 
+      a fetch request to place songs into the database
+      */
       function putSong(form)
       {
         console.log("putSong Function")
         console.log(form.part_1.value)
         console.log(form.part_2.value)
         console.log(form.part_3.value)
-          if(form.part_1.value != "") {
+          if(form.part_1.value != ""&&form.part_2.value != ""&&form.part_3.value != "") {
               putData.song1 = form.part_1.value;
               putData.song2 = form.part_2.value;
               putData.song3 = form.part_2.value;
@@ -144,6 +160,10 @@
 
 
       //delete a song
+      /*
+      grabs the values of the text boxes, inserts %20 if there are space values and then makes 
+      a fetch request to delete song in the database
+      */
       function deleteSong(form)
       {
         console.log("deleteSong Function")
@@ -164,17 +184,11 @@
               }
       }
     
+/*
 
+functions below just determine which div block is displayed based on the choice of the user
 
-
-
-
-
-
-
-
-
-
+*/
     function choice1(){
         document.getElementById('firstChoice').style.display = "block";
         document.getElementById('secondChoice').style.display = "none";
