@@ -1,4 +1,6 @@
  let userData = {}
+ let deleteData = {}
+ let putData = {}
 
     var fetchOptions = {
         method: "POST",
@@ -14,6 +16,12 @@
         }),
       };
     
+      var putOptions = {
+        method: "PUT",
+        headers: new Headers({
+          "Content-Type": "application/json",
+        }),
+      };
 
       const url = "http://localhost:5000/";
 
@@ -29,9 +37,12 @@
         if (e.target.id == "artists"){
         getArtists(e.target);
         }
+        if (e.target.id =="addSong"){
+        putSong(e.target);
+        }
         if (e.target.id == "deleteSong"){
-          deleteSong(e.target);
-          }
+        deleteSong(e.target);
+        }
       }
 
       //grab artist
@@ -101,6 +112,36 @@
               }
       }
     
+      //place a song
+      function putSong(form)
+      {
+        console.log("putSong Function")
+        console.log(form.part_1.value)
+        console.log(form.part_2.value)
+        console.log(form.part_3.value)
+          if(form.part_1.value != "") {
+              putData.song1 = form.part_1.value;
+              putData.song2 = form.part_2.value;
+              putData.song3 = form.part_2.value;
+              let temp1 = form.part_1.value;
+              let temp1Cleaned = temp1.replace(/\s/g, '%20');
+              let temp2 = form.part_2.value;
+              let temp2Cleaned = temp2.replace(/\s/g, '%20');   
+              let temp3 = form.part_3.value;
+              let temp3Cleaned = temp3.replace(/\s/g, '%20');              
+              putOptions.body = JSON.stringify(putData);
+              console.log("http://localhost:5000/query4?song1="+temp1Cleaned+"&song2="+temp2Cleaned+"&song3="+temp3Cleaned);
+              fetch("http://localhost:5000/query4?song1="+temp1Cleaned+"&song2="+temp2Cleaned+"&song3="+temp3Cleaned, fetchOptions)
+              .then((result)=>{
+                  return result.json();
+                }).then((data)=>{
+              });}
+              else {
+                  alert("Error: Please check that you've entries in all text boxes");
+              }
+      }
+    
+
 
       //delete a song
       function deleteSong(form)
@@ -108,8 +149,8 @@
         console.log("deleteSong Function")
         console.log(form.part_1.value)
           if(form.part_1.value != "") {
-              userData.deletion = form.part_1.value
-              deleteOption.body = JSON.stringify(userData);
+              deleteData.deletion = form.part_1.value
+              deleteOption.body = JSON.stringify(deleteData);
               let temp = form.part_1.value;
               let tempCleaned = temp.replace(/\s/g, '%20');  
               console.log("http://localhost:5000/query5?deletion="+tempCleaned)            
