@@ -45,18 +45,17 @@
     </div>
 
     <div id="fourthChoice"  style="display:none;">
-        <form onsubmit="event.preventDefault(); checkThree()">
-        <p>Attribute 1 of Choice 4<input name="part_3"></p>
-        <p>Attribute 2 of Choice 4<input  name="part_4"></p>
-        <button onclick="checkFour(form)">Submit</button>
+        <fform id="addSong" onsubmit="formSubmitHandler(event)">
+        <p>Attribute 1 of Choice 4<input name="part_1"></p>
+        <p>Attribute 2 of Choice 4<input  name="part_2"></p>
+        <button>Submit</button>
         </form>
     </div>
 
     <div id="fifthChoice"  style="display:none;">
-        <form onsubmit="event.preventDefault(); checkThree()">
-        <p>Attribute 1 of Choice 5<input name="part_5"></p>
-        <p>Attribute 2 of Choice 5<input  name="part_6"></p>
-        <button onclick="checkFive(form)">Submit</button>
+        <form id="deleteSong" onsubmit="formSubmitHandler(event)">
+        <p>What song do you want to delete?<input name="part_1"></p>
+        <button>Submit</button>
         <form>
     </div>
 

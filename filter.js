@@ -7,6 +7,14 @@
         }),
       }
 
+      var deleteOption = {
+        method: "DELETE",
+        headers: new Headers({
+          "Authorization": "Bearer <your-auth-token>"
+        }),
+      };
+    
+
       const url = "http://localhost:5000/";
 
 
@@ -21,6 +29,9 @@
         if (e.target.id == "artists"){
         getArtists(e.target);
         }
+        if (e.target.id == "deleteSong"){
+          deleteSong(e.target);
+          }
       }
 
       //grab artist
@@ -80,8 +91,55 @@
       }
     
 
+//get artists
+      function getArtists(form)
+      {
+        console.log("getArtists Function")
+        console.log(form.part_1.value)
+        console.log(form.part_2.value)
+          if(form.part_1.value != "") {
+              userData.artist1 = form.part_1.value
+              userData.artist2 = form.part_2.value
+              fetchOptions.body = JSON.stringify(userData);
+              fetch("http://localhost:5000/path?artist1="+form.part_1.value+"&&artist2="+form.part_2.value, fetchOptions)
+              .then((result)=>{
+                  return result.json();
+                }).then((data)=>{
+              });}
+              else {
+                  alert("Error: Please check that you've entries in all text boxes");
+              }
+      }
 
+      //delete a song
+      function deleteSong(form)
+      {
+        console.log("deleteSong Function")
+        console.log(form.part_1.value)
+          if(form.part_1.value != "") {
+              userData.deletion = form.part_1.value
+              deleteOption.body = JSON.stringify(userData);
+              fetch("http://localhost:5000/path?deletion="+form.part_1.value, deleteOption)
+              .then((result)=>{
+                  return result.json();
+                }).then((data)=>{
+              });}
+              else {
+                  alert("Error: Please check that you've entries in all text boxes");
+              }
+      }
     
+
+
+
+
+
+
+
+
+
+
+      
     function choice1(){
         document.getElementById('firstChoice').style.display = "block";
         document.getElementById('secondChoice').style.display = "none";
