@@ -11,6 +11,7 @@ from generateId import generateId
 dotenv.load_dotenv()
 
 if sys.argv[1] == "init":
+    print(sys.argv[1])
     initDB()
 
 app = Flask(__name__)
@@ -51,7 +52,7 @@ def query_two():
     genre = args.get('genre')
     cursor = mysql.connection.cursor()
     cursor.execute(''' SELECT albumName FROM Genre NATURAL JOIN albumsToGenre Natural JOIN Album
-                    WHERE genreName = %s ;''',(genre,))
+                    WHERE genreName = %s ;''',(genre))
     data = cursor.fetchall()
     cursor.close()
     res = {"name": [x[0] for x in data]}
@@ -74,7 +75,7 @@ def query_three():
 
 @app.route('/query4', methods = ['PUT'])
 def query_four():
-    #{id: 0, data: {"trackName": "hello", "": "": }}
+    #{id: 0, data: {"trackName": "hello", "trackId": "randomid"... }}
     body = request.json
     data = body.data
     # print(type(body))
@@ -92,7 +93,7 @@ def query_five():
     track_name = args.get('trackName')
     cursor = mysql.connection.cursor()
     print(track_name)
-    cursor.execute(''' DELETE FROM Track Where trackName = %s ''', (track_name,))
+    cursor.execute(''' DELETE FROM Track Where trackName = %s ''', (track_name))
     mysql.connection.commit()
     cursor.close()
     return f"Track Deleted."

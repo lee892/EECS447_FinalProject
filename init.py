@@ -163,5 +163,3 @@ def initDB():
             print("after print db contents")
     except Error as e:
         print(e)
-
-initDB()
