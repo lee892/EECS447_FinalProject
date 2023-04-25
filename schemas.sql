@@ -1,75 +1,87 @@
-CREATE DATABASE IF NOT EXISTS freedb_spotifydb;
+CREATE DATABASE IF NOT EXISTS spotifydb;
 
-USE freedb_spotifydb;
+USE spotifydb;
 
+DROP TABLE IF EXISTS Artist;
 CREATE TABLE IF NOT EXISTS Artist (
-    artistId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    artistId VARCHAR(50) NOT NULL PRIMARY KEY,
     artistName VARCHAR(255),
     followerCount INT,
-    artist VARCHAR(255),
     popularity INT,
     uri VARCHAR(255),
     img INT REFERENCES Img(id)
 );
 
+DROP TABLE IF EXISTS Album;
 CREATE TABLE IF NOT EXISTS Album (
-    albumId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    albumId VARCHAR(50) NOT NULL PRIMARY KEY,
     albumType VARCHAR(255),
     totalTracks INT,
     albumName VARCHAR(255),
-    releaseDate DATETIME,
+    releaseDate VARCHAR(50),
     releaseDatePrecision VARCHAR(50),
     popularity INT,
     uri VARCHAR(255),
     img INT REFERENCES Img(id)
 );
 
+DROP TABLE IF EXISTS Track;
 CREATE TABLE IF NOT EXISTS Track (
-    trackId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    albumType VARCHAR(255),
+    trackId VARCHAR(50) NOT NULL PRIMARY KEY,
     discNumber INT,
     msDuration INT,
     isExplicit BOOLEAN,
-    restrictions VARCHAR(255),
     trackName VARCHAR(255),
-    popularity INT,
     previewUri VARCHAR(255),
     trackNum INT,
     uri VARCHAR(255),
     img INT REFERENCES Img(id)
 );
 
+DROP TABLE IF EXISTS Img;
 CREATE TABLE IF NOT EXISTS Img (
-    imgId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    imgId VARCHAR(50) NOT NULL PRIMARY KEY,
     width INT,
     height INT,
     uri VARCHAR(255)
 );
 
+DROP TABLE IF EXISTS availableMarkets;
 CREATE TABLE IF NOT EXISTS availableMarkets (
-    availableMarketsId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    availableMarketsId VARCHAR(50) NOT NULL PRIMARY KEY,
     marketName VARCHAR(255)
 );
 
+DROP TABLE IF EXISTS Genre;
 CREATE TABLE IF NOT EXISTS Genre (
-    genreId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    genreId VARCHAR(50) NOT NULL PRIMARY KEY,
     genreName VARCHAR(50)
 );
 
+DROP TABLE IF EXISTS artistsToAlbums;
 CREATE TABLE IF NOT EXISTS artistsToAlbums (
     artistsToAlbumsId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    artistId INT REFERENCES Artist(id),
-    albumId INT REFERENCES Album(id)
+    artistId VARCHAR(50) REFERENCES Artist(id),
+    albumId VARCHAR(50) REFERENCES Album(id)
 );
 
+DROP TABLE IF EXISTS albumsToTracks;
 CREATE TABLE IF NOT EXISTS albumsToTracks (
     albumsToTracksId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    albumId INT REFERENCES Album(id),
-    trackId INT REFERENCES Track(id)
+    albumId VARCHAR(50) REFERENCES Album(id),
+    trackId VARCHAR(50) REFERENCES Track(id)
 );
 
+DROP TABLE IF EXISTS albumsToGenre;
 CREATE TABLE IF NOT EXISTS albumsToGenre (
     albumsToGenreId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    albumId INT REFERENCES Album(id),
-    genreId INT REFERENCES Genre(id)
+    albumId VARCHAR(50) REFERENCES Album(id),
+    genreId VARCHAR(50) REFERENCES Genre(id)
+);
+
+DROP TABLE IF EXISTS artistsToTracks;
+CREATE TABLE IF NOT EXISTS artistsToTracks (
+    artistsToTracksId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    artistId VARCHAR(50) REFERENCES Artist(id),
+    trackId VARCHAR(50) REFERENCES Track(id)
 );

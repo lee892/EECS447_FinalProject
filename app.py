@@ -3,11 +3,15 @@ from flask_mysqldb import MySQL
 import mysql.connector
 import json
 import os
+import sys
 import dotenv
 from init import initDB
+from generateId import generateId
 
 dotenv.load_dotenv()
-initDB()
+
+if sys.argv[1] == "init":
+    initDB()
 
 app = Flask(__name__)
  
@@ -15,7 +19,7 @@ app.config['MYSQL_HOST'] = os.environ["DB_HOSTNAME"]
 app.config['MYSQL_USER'] = os.environ["DB_USER"]
 app.config['MYSQL_PASSWORD'] = os.environ["DB_PASSWORD"]
 app.config['MYSQL_DB'] = os.environ["DB_NAME"]
- 
+
 mysql = MySQL(app)
 
 @app.route('/', methods = ['GET'])
@@ -33,11 +37,11 @@ def query_one():
     args = request.args
     artist = args.get('artist')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT artistName FROM Track NATURAL JOIN albumsToTracks NATURAL JOIN artistsToAlbums Natural JOIN Artist
+    cursor.execute(''' SELECT trackName FROM Track NATURAL JOIN artistsToAlbums Natural JOIN Artist
                     WHERE artistName = %s;''',(artist))
     data = cursor.fetchall()
     cursor.close()
-    res = {"name": [x[0] for x in data]}
+    res = {"trackName": [x["trackName"] for x in data]}
     return json.dumps(res)
 
 @app.route('/query2', methods = ['GET'])
@@ -58,9 +62,9 @@ def query_three():
     artist_1 = args.get('artist_1')
     artist_2 = args.get('artist_2')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT trackName FROM (SELECT artistName From Artists NATURAL JOIN 
-                    artistsToAlbums NATURAL JOIN albumsToTracks NATURAL JOIN Track as a1
-                    WHERE a1.artistName = %s) as a2 WHERE a2.artistName = %s''',
+    cursor.execute(''' SELECT albumName FROM (Artist NATURAL JOIN artistsToAlbums NATURAL JOIN Album) as a1,
+                    (Artist NATURAL JOIN artistsToAlbums NATURAL JOIN Album) as a2
+                    WHERE a1.artistName = '%s' AND a2.artistName = '%s';''',
                     (artist_1,artist_2))
     cursor.close()
     data = cursor.fetchall()
@@ -69,13 +73,14 @@ def query_three():
 
 @app.route('/query4', methods = ['PUT'])
 def query_four():
-    #{id: 0, name: "ronald "}
+    #{id: 0, data: {"trackName": "hello", "": "": }}
     body = request.json
-    name = body.name
+    data = body.data
     # print(type(body))
     # print(body)
+    trackId = generateId()
     cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO Track VALUES(%s)''',(name))
+    cursor.execute(''' INSERT INTO Track VALUES(%s)''',(data))
     mysql.connection.commit()
     cursor.close()
     return f"Track Added."
