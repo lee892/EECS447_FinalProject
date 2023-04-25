@@ -10,7 +10,7 @@ from generateId import generateId
 
 dotenv.load_dotenv()
 
-if sys.argc > 1 and sys.argv[1] == "init":
+if len(sys.argv) > 1 and sys.argv[1] == "init":
     print(sys.argv[1])
     initDB()
 
