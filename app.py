@@ -11,11 +11,10 @@ from generateId import generateId
 dotenv.load_dotenv()
 
 if len(sys.argv) > 1 and sys.argv[1] == "init":
-    print(sys.argv[1])
     initDB()
 
 app = Flask(__name__)
- 
+
 app.config['MYSQL_HOST'] = os.environ["DB_HOSTNAME"]
 app.config['MYSQL_USER'] = os.environ["DB_USER"]
 app.config['MYSQL_PASSWORD'] = os.environ["DB_PASSWORD"]
@@ -38,7 +37,7 @@ def query_one():
     args = request.args
     artist = args.get('artist')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT trackName FROM Track NATURAL JOIN artistsToAlbums Natural JOIN Artist
+    cursor.execute(''' SELECT trackName FROM Track NATURAL JOIN artistsToTracks Natural JOIN Artist
                     WHERE artistName = %s;''',(artist))
     data = cursor.fetchall()
     print(data)
