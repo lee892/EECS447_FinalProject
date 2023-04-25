@@ -37,15 +37,8 @@ def query_one():
     args = request.args
     artist = args.get('artist')
     cursor = mysql.connection.cursor()
-<<<<<<< HEAD
     cursor.execute(''' SELECT trackName FROM Track NATURAL JOIN artistsToAlbums Natural JOIN Artist
                     WHERE artistName = %s;''',(artist))
-=======
-    cursor.execute(''' SELECT artistName FROM Track 
-	NATURAL JOIN albumsToTracks NATURAL JOIN artistsToAlbums
-	INNER JOIN Artist ON 
-	artistsToAlbums.artistId=Artist.artistId WHERE artistName = %s;''',(artist,))
->>>>>>> origin/main
     data = cursor.fetchall()
     print(data)
     cursor.close()
