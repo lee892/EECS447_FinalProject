@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS Artist (
     artistId VARCHAR(50) NOT NULL PRIMARY KEY,
     artistName VARCHAR(255),
     followerCount INT,
+    artist VARCHAR(255),
     popularity INT,
     uri VARCHAR(255),
     img INT REFERENCES Img(id)
