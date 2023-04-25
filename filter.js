@@ -5,6 +5,10 @@ let userData = {}
 let deleteData = {}
 let putData = {}
 
+let query1Tracks = []
+let query2Albums = []
+let query3Albums = []
+
 //post method
 var fetchOptions = {
   method: "POST",
