@@ -65,14 +65,14 @@ def query_two():
     res = {"name": [x[0] for x in data]}
     return json.dumps(res)
 
-@app.route('/query3', methods = ['GET'])
+@app.route('/query3', methods = ['GET', 'POST'])
 def query_three():
     args = request.args
     print(args)
-    artist_1 = args.get('artist_1')
-
-    artist_2 = args.get('artist_2')
-
+    artist_1 = args.get('artist1')
+    print("artist1:", artist_1)
+    artist_2 = args.get('artist2')
+    print("artist2:", artist_2)
     cursor = mysql.connection.cursor()
     cursor.execute(''' SELECT a1.trackName FROM (SELECT artistName, trackName FROM artistsToTracks att1 NATURAL JOIN Track t INNER JOIN Artist ON att1.artistId = Artist.artistId ) a1,
 (SELECT artistName, trackName FROM artistsToTracks att NATURAL JOIN Track t INNER JOIN Artist ON att.artistId = Artist.artistId ) a2
@@ -80,7 +80,6 @@ def query_three():
                     [artist_1,artist_2])
     data = cursor.fetchall()
     cursor.close()
-
     for d in data:
         print(d)
     res = {"name": [x[0] for x in data]}
@@ -89,8 +88,10 @@ def query_three():
 @app.route('/query4', methods = ['PUT'])
 def query_four():
     #{id: 0, data: {"trackName": "hello", "trackId": "randomid"... }}
-    body = request.json
-    trackName, albumName, artistName = body.data
+    args = request.args
+    trackName = args.get("track")
+    artistName = args.get("artist")
+    albumName = args.get("album")
     # print(type(body))
     # print(body)
     trackId = generateId(16)
