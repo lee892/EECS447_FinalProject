@@ -71,14 +71,8 @@ def query_three():
     artist_1 = args.get('artist_1')
     artist_2 = args.get('artist_2')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT a5.albumName, a6.albumName FROM Artist a1, Artist a2,
-                    artistsToAlbums a3, artistsToAlbums a4,
-                    Album a5, Album a6
-                    WHERE a1.artistName = %s AND a2.artistName = %s
-                    AND a1.artistId = a3.artistId
-                    AND a2.artistId = a4.artistId
-                    AND a3.albumId = a5.albumId
-                    AND a4.albumId = a6.albumId;''',
+    cursor.execute(''' SELECT a1.albumName, a2.trackName FROM Artist NATURAL JOIN artistsToTracks a1, (Select trackName FROM artistsToTracks NATURAL JOIN Artist ) a2
+                    WHERE a1.artistName = %s AND a2.artistName = %s''',
                     [artist_1,artist_2])
     cursor.close()
     data = cursor.fetchall()
