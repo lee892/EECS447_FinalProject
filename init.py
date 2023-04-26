@@ -5,10 +5,11 @@ import requests
 import time
 
 ARTISTS = [
-    "5K4W6rqBFWDnAN6FQUkS6x",
-    "699OTQXzgjhIYAHMy9RyPD",
-    "4O15NlyKLIASxsJ0PrXPfz",
-    "6Xgp2XMz1fhVYe7i6yNAax"
+    "3WrFJ7ztbogyGnTHbHJFl2"
+    "0L8ExT028jH3ddEcZwqJJ5",
+    "6P7H3ai06vU1sGvdpBwDmE",
+    "2YZyLoL8N0Wb9xBt1NhZWg",
+    
     
 ]
 '''"3WrFJ7ztbogyGnTHbHJFl2"
@@ -22,7 +23,11 @@ ARTISTS = [
     "1YzCsTRb22dQkh9lghPIrp",
     "4F7Q5NV6h5TSwCainz8S5A",
     "5pKCCKE2ajJHZ9KAiaK11H",
-    "3nFkdlSjzX9mRTtwJOzDYB"'''
+    "3nFkdlSjzX9mRTtwJOzDYB",
+    "5K4W6rqBFWDnAN6FQUkS6x",
+    "699OTQXzgjhIYAHMy9RyPD",
+    "4O15NlyKLIASxsJ0PrXPfz",
+    "6Xgp2XMz1fhVYe7i6yNAax"'''
 
 
 def printDBContents(connection):

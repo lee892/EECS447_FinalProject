@@ -41,7 +41,7 @@ function showQuery(index, data) {
   let list = document.createElement("ul")
   data.forEach(n => {
     li = document.createElement("li")
-    li.textContent = n[0]
+    li.textContent = n
     list.appendChild(li)
   })
   view.appendChild(list)
@@ -91,7 +91,7 @@ function getArtist(form) {
         return result.json();
       }).then((data) => {
         listElements = new Set()
-        data.body.forEach(n => listElements.add(n))
+        data.body.forEach(n => listElements.add(n[0]))
         console.log(listElements)
         showQuery("1", listElements)
       });
@@ -120,7 +120,7 @@ function getGenre(form) {
         return result.json();
       }).then((data) => {
         listElements = new Set()
-        data.body.forEach(n => listElements.add(n))
+        data.body.forEach(n => listElements.add(n[0]))
         console.log(listElements)
         showQuery("2", listElements)
       });
@@ -153,7 +153,7 @@ function getArtists(form) {
         return result.json();
       }).then((data) => {
         listElements = new Set()
-        data.body.forEach(n => listElements.add(n))
+        data.body.forEach(n => listElements.add(n[0]))
         console.log(listElements)
         showQuery("3", listElements)
       });
