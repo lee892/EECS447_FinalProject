@@ -24,7 +24,7 @@
     <div id="firstChoice" >
 
         <form id="artist" onsubmit="formSubmitHandler(event)">
-            <p>Please input Artist<input style="margin-left:2%" name="part_1" onfocus="this.value=''"></p>
+            <input placeholder="Artist" style="margin-left:2%" name="part_1" onfocus="this.value=''">
             <button>Submit</button>
         </form>
         <h2>Songs</h2>
@@ -34,7 +34,7 @@
 
     <div id="secondChoice" style="display:none;">
         <form id="genre" onsubmit="formSubmitHandler(event)">
-            <p>Please input Genre<input style="margin-left:2%" name="part_1" onfocus="this.value=''"></p>
+            <input placeholder="Genre" style="margin-left:2%" name="part_1" onfocus="this.value=''">
             <button>Submit</button>
         </form>
         <h2>Artists</h2>
@@ -44,8 +44,8 @@
 
     <div id="thirdChoice" style="display:none;">
         <form id="artists" onsubmit="formSubmitHandler(event)">
-            <p>Please input Artist 1<input style="margin-left:2%" name="part_1" onfocus="this.value=''"></p>
-            <p>Please input Artist 2<input style="margin-left:2%" name="part_2" onfocus="this.value=''"></p>
+            <p>Please input Artist 1<input placeholder="Artist1" style="margin-left:2%" name="part_1" onfocus="this.value=''"></p>
+            <p>Please input Artist 2<input placeholder="Artist2" style="margin-left:2%" name="part_2" onfocus="this.value=''"></p>
             <button>Submit</button>
         </form>
         <h2>Songs</h2>
@@ -55,9 +55,9 @@
 
     <div id="fourthChoice" style="display:none;">
         <form id="addSong" onsubmit="formSubmitHandler(event)">
-            <p>Track Name<input style="margin-left:2%" name="part_1" onfocus="this.value=''"></p>
-            <p>Artist Name<input style="margin-left:2%" name="part_2" onfocus="this.value=''"></p>
-            <p>Album Name<input style="margin-left:2%" name="part_3" onfocus="this.value=''"></p>
+            <input placeholder="Track" style="margin-left:2%" name="part_1" onfocus="this.value=''">
+            <input placeholder="Artist" style="margin-left:2%" name="part_2" onfocus="this.value=''">
+            <input placeholder="Album" style="margin-left:2%" name="part_3" onfocus="this.value=''">
             <button>Submit</button>
         </form>
         <div id="queryResult4">
@@ -66,7 +66,7 @@
 
     <div id="fifthChoice" style="display:none;">
         <form id="deleteSong" onsubmit="formSubmitHandler(event)">
-            <p>What song do you want to delete?<input style="margin-left:2%" name="part_1"></p>
+            <p>What song do you want to delete?<input placeholder="Song" style="margin-left:2%" name="part_1"></p>
             <button>Submit</button>
         <form>
         <div id="queryResult5">
