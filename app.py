@@ -40,7 +40,7 @@ def query_one():
     args = request.args
     artist = args.get('artist')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT trackName
+    cursor.execute(''' SELECT DISTINCT trackName
         FROM Track NATURAL JOIN artistsToTracks INNER JOIN Artist ON 
         artistsToTracks.artistId=Artist.artistId WHERE LOWER(artistName) = LOWER(%s);''',[artist])
     data = cursor.fetchall()
@@ -57,7 +57,7 @@ def query_two():
     args = request.args
     genre = args.get('genre')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT artistName FROM artistsToGenre Natural JOIN Artist
+    cursor.execute(''' SELECT DISTINCT artistName FROM artistsToGenre Natural JOIN Artist
                     WHERE LOWER(genreName) = LOWER(%s);''',[genre])
     data = cursor.fetchall()
     cursor.close()
@@ -75,7 +75,7 @@ def query_three():
     artist_2 = args.get('artist2')
     print("artist2:", artist_2)
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT a1.trackName FROM (SELECT artistName, trackName FROM artistsToTracks att1 NATURAL JOIN Track t INNER JOIN Artist ON att1.artistId = Artist.artistId ) a1,
+    cursor.execute(''' SELECT DISTINCT a1.trackName FROM (SELECT artistName, trackName FROM artistsToTracks att1 NATURAL JOIN Track t INNER JOIN Artist ON att1.artistId = Artist.artistId ) a1,
 (SELECT artistName, trackName FROM artistsToTracks att NATURAL JOIN Track t INNER JOIN Artist ON att.artistId = Artist.artistId ) a2
                     WHERE LOWER(a1.artistName) = LOWER(%s) AND LOWER(a2.artistName) =  LOWER(%s) AND a1.trackName = a2.trackName''',
                     [artist_1,artist_2])
@@ -138,6 +138,5 @@ def query_five():
     cursor.close()
     res = {"body": f"Track {track_name} Deleted."}
     return json.dumps(res)
-
 
 app.run(host='localhost', port=5000)
