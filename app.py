@@ -32,7 +32,7 @@ def getArtists():
     cursor.execute(" SELECT * FROM Artist; ")
     data = cursor.fetchall()
     cursor.close()
-    res = {"name": [x[1] for x in data]}
+    res = {"body": [x for x in data]}
     return json.dumps(res)
 
 @app.route('/query1', methods = ['GET', 'POST'])
@@ -40,7 +40,7 @@ def query_one():
     args = request.args
     artist = args.get('artist')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT discNumber, msDuration, isExplicit, trackName, previewUri
+    cursor.execute(''' SELECT trackName
         FROM Track NATURAL JOIN artistsToTracks INNER JOIN Artist ON 
         artistsToTracks.artistId=Artist.artistId WHERE artistName = %s;''',[artist])
     data = cursor.fetchall()
@@ -48,7 +48,8 @@ def query_one():
     for d in data:
         print(d)
     cursor.close()
-    res = {"name": [x[3] for x in data]}
+    res = {"body": [x for x in data]}
+    print(res)
     return json.dumps(res)
 
 @app.route('/query2', methods = ['GET', 'POST'])
@@ -62,7 +63,7 @@ def query_two():
     cursor.close()
     for d in data:
         print(d)
-    res = {"name": [x[0] for x in data]}
+    res = {"body": [x for x in data]}
     return json.dumps(res)
 
 @app.route('/query3', methods = ['GET', 'POST'])
@@ -74,7 +75,7 @@ def query_three():
     artist_2 = args.get('artist2')
     print("artist2:", artist_2)
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT a1.trackName FROM (SELECT artistName, trackName FROM artistsToTracks att1 NATURAL JOIN Track t INNER JOIN Artist ON att1.artistId = Artist.artistId ) a1,
+    cursor.execute(''' SELECT a1.trackName, a1.previewUri FROM (SELECT artistName, trackName FROM artistsToTracks att1 NATURAL JOIN Track t INNER JOIN Artist ON att1.artistId = Artist.artistId ) a1,
 (SELECT artistName, trackName FROM artistsToTracks att NATURAL JOIN Track t INNER JOIN Artist ON att.artistId = Artist.artistId ) a2
                     WHERE a1.artistName = %s AND a2.artistName =  %s AND a1.trackName = a2.trackName''',
                     [artist_1,artist_2])
@@ -82,7 +83,7 @@ def query_three():
     cursor.close()
     for d in data:
         print(d)
-    res = {"name": [x[0] for x in data]}
+    res = {"body": [x for x in data]}
     return json.dumps(res)
 
 @app.route('/query4', methods = ['PUT'])

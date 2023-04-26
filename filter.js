@@ -33,6 +33,25 @@ var putOptions = {
   }),
 };
 
+function showQuery1() {
+  let view = document.getElementById("queryResult1")
+  let list = document.createElement("ul")
+  query1Tracks.forEach(n => {
+    li = document.createElement("li")
+    li.textContent = n[0]
+    list.appendChild(li)
+  })
+  view.appendChild(list)
+}
+
+function showQuery2() {
+
+}
+
+function showQuery3() {
+
+}
+
 // unused const url = "http://localhost:5000/";
 
 /*
@@ -76,7 +95,10 @@ function getArtist(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
-        console.log(data)
+        query1Tracks = []
+        data.body.forEach(n => query1Tracks.push(n))
+        print(query1Tracks)
+        showQuery1(form)
       });
   }
   else {
