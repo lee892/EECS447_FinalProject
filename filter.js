@@ -97,7 +97,7 @@ function getArtist(form) {
       }).then((data) => {
         query1Tracks = []
         data.body.forEach(n => query1Tracks.push(n))
-        print(query1Tracks)
+        console.log(query1Tracks)
         showQuery1(form)
       });
   }
