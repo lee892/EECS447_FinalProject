@@ -89,6 +89,7 @@ def query_three():
 def query_four():
     #{id: 0, data: {"trackName": "hello", "trackId": "randomid"... }}
     args = request.args
+    print(args)
     trackName = args.get("track")
     artistName = args.get("artist")
     albumName = args.get("album")
@@ -122,13 +123,18 @@ def query_four():
 @app.route('/query5', methods = ['DELETE'])
 def query_five():
     args = request.args
-    track_name = args.get('trackName')
+    track_name = args.get('deletion')
     cursor = mysql.connection.cursor()
     print(track_name)
-    cursor.execute(''' DELETE FROM Track Where trackName = '%s' ''', (track_name))
+    cursor.execute(''' DELETE FROM Track Where trackName = %s ''', [track_name])
     mysql.connection.commit()
     cursor.close()
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' Select * from Track where trackName=%s''', [track_name])
+    data = cursor.fetchall()
+    print("data:",data)
+    cursor.close()
     return f"Track Deleted."
-    
+
 
 app.run(host='localhost', port=5000)
