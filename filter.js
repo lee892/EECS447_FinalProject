@@ -48,7 +48,17 @@ function showQuery1() {
 }
 
 function showQuery2() {
-
+  let view = document.getElementById("queryResult1")
+  while (view.firstChild) {
+    view.removeChild(view.firstChild)
+  }
+  let list = document.createElement("ul")
+  query1Tracks.forEach(n => {
+    li = document.createElement("li")
+    li.textContent = n[0]
+    list.appendChild(li)
+  })
+  view.appendChild(list)
 }
 
 function showQuery3() {

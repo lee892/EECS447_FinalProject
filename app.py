@@ -42,7 +42,7 @@ def query_one():
     cursor = mysql.connection.cursor()
     cursor.execute(''' SELECT trackName
         FROM Track NATURAL JOIN artistsToTracks INNER JOIN Artist ON 
-        artistsToTracks.artistId=Artist.artistId WHERE artistName = %s;''',[artist])
+        artistsToTracks.artistId=Artist.artistId WHERE LOWER(artistName) = LOWER(%s);''',[artist])
     data = cursor.fetchall()
 
     for d in data:
@@ -58,7 +58,7 @@ def query_two():
     genre = args.get('genre')
     cursor = mysql.connection.cursor()
     cursor.execute(''' SELECT artistName, followerCount, popularity FROM artistsToGenre Natural JOIN Artist
-                    WHERE genreName = %s;''',[genre])
+                    WHERE LOWER(genreName) = LOWER(%s);''',[genre])
     data = cursor.fetchall()
     cursor.close()
     for d in data:
@@ -77,7 +77,7 @@ def query_three():
     cursor = mysql.connection.cursor()
     cursor.execute(''' SELECT a1.trackName, a1.previewUri FROM (SELECT artistName, trackName FROM artistsToTracks att1 NATURAL JOIN Track t INNER JOIN Artist ON att1.artistId = Artist.artistId ) a1,
 (SELECT artistName, trackName FROM artistsToTracks att NATURAL JOIN Track t INNER JOIN Artist ON att.artistId = Artist.artistId ) a2
-                    WHERE a1.artistName = %s AND a2.artistName =  %s AND a1.trackName = a2.trackName''',
+                    WHERE LOWER(a1.artistName) = LOWER(%s) AND LOWER(a2.artistName) =  LOWER(%s) AND a1.trackName = a2.trackName''',
                     [artist_1,artist_2])
     data = cursor.fetchall()
     cursor.close()
