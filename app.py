@@ -64,7 +64,7 @@ def query_two():
     res = {"name": [x[0] for x in data]}
     return json.dumps(res)
 
-@app.route('/query3', methods = ['GET', 'POST'])
+@app.route('/query3', methods = ['GET'])
 def query_three():
     args = request.args
     print(args)
