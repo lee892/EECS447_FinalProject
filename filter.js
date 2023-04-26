@@ -33,13 +33,13 @@ var putOptions = {
   }),
 };
 
-function showQuery1() {
-  let view = document.getElementById("queryResult1")
+function showQuery(index, data) {
+  let view = document.getElementById(`queryResult${index}`)
   while (view.firstChild) {
     view.removeChild(view.firstChild)
   }
   let list = document.createElement("ul")
-  query1Tracks.forEach(n => {
+  data.forEach(n => {
     li = document.createElement("li")
     li.textContent = n[0]
     list.appendChild(li)
@@ -48,7 +48,7 @@ function showQuery1() {
 }
 
 function showQuery2() {
-  let view = document.getElementById("queryResult1")
+  let view = document.getElementById("queryResult2")
   while (view.firstChild) {
     view.removeChild(view.firstChild)
   }
@@ -62,7 +62,17 @@ function showQuery2() {
 }
 
 function showQuery3() {
-
+  let view = document.getElementById("queryResult3")
+  while (view.firstChild) {
+    view.removeChild(view.firstChild)
+  }
+  let list = document.createElement("ul")
+  query1Tracks.forEach(n => {
+    li = document.createElement("li")
+    li.textContent = n[0]
+    list.appendChild(li)
+  })
+  view.appendChild(list)
 }
 
 // unused const url = "http://localhost:5000/";
@@ -108,10 +118,10 @@ function getArtist(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
-        query1Tracks = []
-        data.body.forEach(n => query1Tracks.push(n))
-        console.log(query1Tracks)
-        showQuery1(form)
+        listElements = []
+        data.body.forEach(n => listElements.push(n))
+        console.log(listElements)
+        showQuery("1", listElements)
       });
   }
   else {
@@ -137,6 +147,10 @@ function getGenre(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
+        listElements = []
+        data.body.forEach(n => listElements.push(n))
+        console.log(listElements)
+        showQuery("2", listElements)
       });
   }
   else {
@@ -166,6 +180,10 @@ function getArtists(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
+        listElements = []
+        data.body.forEach(n => listElements.push(n))
+        console.log(listElements)
+        showQuery("3", listElements)
       });
   }
   else {
@@ -241,41 +259,71 @@ functions below just determine which div block is displayed based on the choice 
 
 */
 function choice1() {
+  inputElements = document.querySelectorAll("input")
+  inputElements.forEach(inputElement => inputElement.value="")
   document.getElementById('firstChoice').style.display = "block";
   document.getElementById('secondChoice').style.display = "none";
   document.getElementById('thirdChoice').style.display = "none";
   document.getElementById('fourthChoice').style.display = "none";
   document.getElementById('fifthChoice').style.display = "none";
+  let view = document.getElementById(`queryResult1`)
+  while (view.firstChild) {
+    view.removeChild(view.firstChild)
+  }
 }
 
 function choice2() {
+  inputElements = document.querySelectorAll("input")
+  inputElements.forEach(inputElement => inputElement.value="")
   document.getElementById('firstChoice').style.display = "none";
   document.getElementById('secondChoice').style.display = "block";
   document.getElementById('thirdChoice').style.display = "none";
   document.getElementById('fourthChoice').style.display = "none";
   document.getElementById('fifthChoice').style.display = "none";
+  let view = document.getElementById(`queryResult2`)
+  while (view.firstChild) {
+    view.removeChild(view.firstChild)
+  }
 }
 
 function choice3() {
+  inputElements = document.querySelectorAll("input")
+  inputElements.forEach(inputElement => inputElement.value="")
   document.getElementById('firstChoice').style.display = "none";
   document.getElementById('secondChoice').style.display = "none";
   document.getElementById('thirdChoice').style.display = "block";
   document.getElementById('fourthChoice').style.display = "none";
   document.getElementById('fifthChoice').style.display = "none";
+  let view = document.getElementById(`queryResult3`)
+  while (view.firstChild) {
+    view.removeChild(view.firstChild)
+  }
 }
 
 function choice4() {
+  inputElements = document.querySelectorAll("input")
+  inputElements.forEach(inputElement => inputElement.value="")
   document.getElementById('firstChoice').style.display = "none";
   document.getElementById('secondChoice').style.display = "none";
   document.getElementById('thirdChoice').style.display = "none";
   document.getElementById('fourthChoice').style.display = "block";
   document.getElementById('fifthChoice').style.display = "none";
+  let view = document.getElementById(`queryResult4`)
+  while (view.firstChild) {
+    view.removeChild(view.firstChild)
+  }
 }
 
 function choice5() {
+  inputElements = document.querySelectorAll("input")
+  inputElements.forEach(inputElement => inputElement.value="")
   document.getElementById('firstChoice').style.display = "none";
   document.getElementById('secondChoice').style.display = "none";
   document.getElementById('thirdChoice').style.display = "none";
   document.getElementById('fourthChoice').style.display = "none";
   document.getElementById('fifthChoice').style.display = "block";
+  let view = document.getElementById(`queryResult5`)
+  while (view.firstChild) {
+    view.removeChild(view.firstChild)
+  }
 }
