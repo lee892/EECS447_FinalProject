@@ -35,7 +35,7 @@ def getArtists():
     res = {"name": [x[1] for x in data]}
     return json.dumps(res)
 
-@app.route('/query1', methods = ['GET'])
+@app.route('/query1', methods = ['GET', 'POST'])
 def query_one():
     args = request.args
     artist = args.get('artist')
@@ -51,7 +51,7 @@ def query_one():
     res = {"name": [x[3] for x in data]}
     return json.dumps(res)
 
-@app.route('/query2', methods = ['GET'])
+@app.route('/query2', methods = ['GET', 'POST'])
 def query_two():
     args = request.args
     genre = args.get('genre')
