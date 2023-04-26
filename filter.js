@@ -35,6 +35,9 @@ var putOptions = {
 
 function showQuery1() {
   let view = document.getElementById("queryResult1")
+  while (view.firstChild) {
+    view.removeChild(view.firstChild)
+  }
   let list = document.createElement("ul")
   query1Tracks.forEach(n => {
     li = document.createElement("li")
@@ -97,7 +100,7 @@ function getArtist(form) {
       }).then((data) => {
         query1Tracks = []
         data.body.forEach(n => query1Tracks.push(n))
-        print(query1Tracks)
+        console.log(query1Tracks)
         showQuery1(form)
       });
   }
