@@ -44,10 +44,11 @@ def query_one():
         FROM Track NATURAL JOIN artistsToTracks INNER JOIN Artist ON 
         artistsToTracks.artistId=Artist.artistId WHERE artistName = %s;''',[artist])
     data = cursor.fetchall()
+
     for d in data:
         print(d)
     cursor.close()
-    res = {"name": [x[0] for x in data]}
+    res = {"name": [x[3] for x in data]}
     return json.dumps(res)
 
 @app.route('/query2', methods = ['GET', 'POST'])
