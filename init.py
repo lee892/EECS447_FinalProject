@@ -5,11 +5,20 @@ import requests
 import time
 
 ARTISTS = [
-    "3WrFJ7ztbogyGnTHbHJFl2"
+   "3WrFJ7ztbogyGnTHbHJFl2",
     "0L8ExT028jH3ddEcZwqJJ5",
     "6P7H3ai06vU1sGvdpBwDmE",
     "2YZyLoL8N0Wb9xBt1NhZWg",
-    
+    "5vngPClqofybhPERIqQMYd",
+    "7FBcuc1gsnv6Y1nwFtNRCb",
+    "2wOqMjp9TyABvtHdOSOTUS",
+    "1YzCsTRb22dQkh9lghPIrp",
+    "4F7Q5NV6h5TSwCainz8S5A",
+    "5pKCCKE2ajJHZ9KAiaK11H",
+    "3nFkdlSjzX9mRTtwJOzDYB",
+    "699OTQXzgjhIYAHMy9RyPD",
+    "4O15NlyKLIASxsJ0PrXPfz",
+    "6Xgp2XMz1fhVYe7i6yNAax" 
     
 ]
 '''"3WrFJ7ztbogyGnTHbHJFl2"
@@ -80,22 +89,29 @@ def populateDB(connection):
         i = 0
         while i in range(len(albums)) and i < 2:
             albumId = albums[i]["id"]
+            existingAlbum = False
+            with connection.cursor() as cursor:
+                cursor.execute(f"SELECT * FROM Album WHERE albumId='{albumId}';")
+                if len(cursor.fetchall()) > 0:
+                    existingAlbum = True
             #Add album to database
             with connection.cursor() as cursor:
-                albumType = albums[i]["type"]
-                totalTracks = albums[i]["total_tracks"]
-                albumName = albums[i]["name"].translate(str.maketrans({"'": r"\'", "\\": r"\\"}))
-                print(f"Album {i}: {albumName}")
-                releaseDate = albums[i]["release_date"]
-                releaseDatePrecision = albums[i]["release_date_precision"]
-                popularity = albums[i].get("popularity", 0)
-                uri = albums[i]["uri"]
-                cursor.execute(f"INSERT INTO Album(albumId, albumType, totalTracks, albumName, releaseDate, releaseDatePrecision, popularity, uri) \
-                            VALUES('{albumId}', '{albumType}', {totalTracks}, '{albumName}', '{releaseDate}', '{releaseDatePrecision}', {popularity}, '{uri}');")
+                if (not existingAlbum):
+                    albumType = albums[i]["type"]
+                    totalTracks = albums[i]["total_tracks"]
+                    albumName = albums[i]["name"].translate(str.maketrans({"'": r"\'", "\\": r"\\"}))
+                    print(f"Album {i}: {albumName}")
+                    releaseDate = albums[i]["release_date"]
+                    releaseDatePrecision = albums[i]["release_date_precision"]
+                    popularity = albums[i].get("popularity", 0)
+                    uri = albums[i]["uri"]
+                    cursor.execute(f"INSERT INTO Album(albumId, albumType, totalTracks, albumName, releaseDate, releaseDatePrecision, popularity, uri) \
+                                VALUES('{albumId}', '{albumType}', {totalTracks}, '{albumName}', '{releaseDate}', '{releaseDatePrecision}', {popularity}, '{uri}');")
             #Add artist-album relationship
             with connection.cursor() as cursor:
-                cursor.execute(f"INSERT INTO artistsToAlbums(artistId, albumId) \
-                               VALUES('{artist}', '{albumId}');")
+                if (not existingAlbum):
+                    cursor.execute(f"INSERT INTO artistsToAlbums(artistId, albumId) \
+                                VALUES('{artist}', '{albumId}');")
 
             #Get album
             album = makeReq(f"https://api.spotify.com/v1/albums/{albumId}", access_token)
@@ -103,30 +119,37 @@ def populateDB(connection):
             for genre in album["genres"]:
                 print(genre)
                 with connection.cursor() as cursor:
-                    cursor.execute(f"INSERT INTO albumsToGenre(albumId, genreName) \
+                    if (not existingAlbum):
+                        cursor.execute(f"INSERT INTO albumsToGenre(albumId, genreName) \
                                    VALUES('{albumId}', '{genre}');")
 
 
             #Iterate over tracks
             for track in album["tracks"]["items"]:
                 trackId = track["id"]
-                
+                existingTrack = False
+                with connection.cursor() as cursor:
+                    cursor.execute(f"SELECT * FROM Track WHERE trackId='{trackId}';")
+                    if len(cursor.fetchall()) > 0:
+                        existingTrack = True
                 #Add track to database
                 with connection.cursor() as cursor:
-                    discNumber = track["disc_number"]
-                    msDuration = track["duration_ms"]
-                    isExplicit = track["explicit"]
-                    trackName = track["name"].translate(str.maketrans({"'": r"\'", "\\": r"\\"}))
-                    print(f"Track: {trackName}")
-                    previewUri = track["preview_url"]
-                    trackNum = track["track_number"]
-                    uri = track["uri"]
-                    cursor.execute(f"INSERT INTO Track(trackId, discNumber, msDuration, isExplicit, trackName, previewUri, trackNum, uri) \
-                                VALUES('{trackId}', {discNumber}, {msDuration}, {isExplicit}, '{trackName}', '{previewUri}', {trackNum}, '{uri}');")
+                    if not existingTrack:
+                        discNumber = track["disc_number"]
+                        msDuration = track["duration_ms"]
+                        isExplicit = track["explicit"]
+                        trackName = track["name"].translate(str.maketrans({"'": r"\'", "\\": r"\\"}))
+                        print(f"Track: {trackName}")
+                        previewUri = track["preview_url"]
+                        trackNum = track["track_number"]
+                        uri = track["uri"]
+                        cursor.execute(f"INSERT INTO Track(trackId, discNumber, msDuration, isExplicit, trackName, previewUri, trackNum, uri) \
+                                    VALUES('{trackId}', {discNumber}, {msDuration}, {isExplicit}, '{trackName}', '{previewUri}', {trackNum}, '{uri}');")
 
                 #Add album-track relationship
                 with connection.cursor() as cursor:
-                    cursor.execute(f"INSERT INTO albumsToTracks(albumId, trackId) \
+                    if not existingTrack:
+                        cursor.execute(f"INSERT INTO albumsToTracks(albumId, trackId) \
                                 VALUES('{albumId}', '{trackId}');")
 
                 for trackArtist in track["artists"]:
@@ -143,7 +166,7 @@ def populateDB(connection):
                     #Add artist if not exists
                     if not existingArtist:
                         with connection.cursor() as cursor:
-                            trackArtistName = artistInfo["name"]
+                            trackArtistName = artistInfo["name"].translate(str.maketrans({"'": r"\'", "\\": r"\\"}))
                             print(f"Artist: {trackArtistName}")
                             followerCount = artistInfo["followers"]["total"]
                             popularity = artistInfo["popularity"]
