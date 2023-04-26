@@ -95,21 +95,28 @@ def query_four():
     # print(type(body))
     # print(body)
     trackId = generateId(16)
-    artistId = generateId(16)
     albumId = generateId(16)
+    artistId = []
     cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO Album(albumId, albumName) VALUES('%s', '%s');''',(albumId, albumName))
+    cursor.execute(''' SELECT artistId FROM Artist WHERE artistName = %s''',(artistName,))
+    data = cursor.fetchall()
     cursor.close()
+    if (not data): 
+        artistId = generateId(16)
+        cursor = mysql.connection.cursor()
+        cursor.execute(''' INSERT INTO Artist(artistId, artistName) VALUES(%s, %s); ''', (artistId, artistName))
+        artistId = data[0]
+        cursor.close()
+    else: artistId = data[0]
+    print(data)
     cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO Track(trackId, trackName) VALUES('%s', '%s');''',(trackId, trackName))
+    cursor.execute(''' INSERT INTO Album(albumId, albumName) VALUES(%s, %s);
+                    INSERT INTO Track(trackId, trackName) VALUES(%s, %s);
+                    INSERT INTO artistsToAlbums(artistId, albumId) VALUES(%s, %s);
+                    INSERT INTO artistsToTracks(artistId, trackId) VALUES(%s, %s); ''',
+                    (albumId, albumName, trackId, trackName, artistId, albumId, artistId, trackId,))
     cursor.close()
-    cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO Artist(artistId, artistName) VALUES('%s', '%s');''', (artistId, artistName))
-    cursor.close()
-    cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO artistsToTracks(artistId, trackId) VALUES('%s', '%s');''', (artistId, trackId))
     mysql.connection.commit()
-    cursor.close()
     return f"Track Added."
 
 @app.route('/query5', methods = ['DELETE'])
