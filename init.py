@@ -5,10 +5,10 @@ import requests
 import time
 
 ARTISTS = [
-    "4Z8W4fKeB5YxbusRsdQVPb",
-    "53XhwfbYqKCa1cC15pYq2q",
-    "6eUKZXaKkcviH0Ku9w2n3V",
-    "4iHNK0tOyZPYnBU7nGAgpQ"
+    "5K4W6rqBFWDnAN6FQUkS6x",
+    "699OTQXzgjhIYAHMy9RyPD",
+    "4O15NlyKLIASxsJ0PrXPfz",
+    "6Xgp2XMz1fhVYe7i6yNAax"
     
 ]
 '''"3WrFJ7ztbogyGnTHbHJFl2"
@@ -173,7 +173,7 @@ def initDB():
             port=3306
         ) as connection:
             #Open .sql file for reading
-            fd = open("schemas.sql", "r")
+            fd = open("persistentSchemas.sql", "r")
             sqlFile = fd.read()
             fd.close()
 
