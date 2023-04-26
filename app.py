@@ -41,9 +41,10 @@ def query_one():
     print("this method is calling")
     artist = args.get('artist')
     cursor = mysql.connection.cursor()
-    cursor.execute(f"Select * from Track t1, artistsToTracks t2, Artist a WHERE t1.trackId=t2.trackId and t2.artistId=a.artistId and artistName = '{artist}';")
-    # cursor.execute(''' SELECT * FROM artistsToTracks NATURAL JOIN Track
-    #                 WHERE artistName = %s;''',[artist])
+    cursor.execute(''' SELECT artistName FROM Track 
+	NATURAL JOIN albumsToTracks NATURAL JOIN artistsToAlbums
+	INNER JOIN Artist ON 
+	artistsToAlbums.artistId=Artist.artistId WHERE artistName = %s;''',(artist,))
     data = cursor.fetchall()
     for d in data:
         print(d)
