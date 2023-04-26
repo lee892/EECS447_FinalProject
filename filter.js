@@ -47,34 +47,6 @@ function showQuery(index, data) {
   view.appendChild(list)
 }
 
-function showQuery2() {
-  let view = document.getElementById("queryResult2")
-  while (view.firstChild) {
-    view.removeChild(view.firstChild)
-  }
-  let list = document.createElement("ul")
-  query1Tracks.forEach(n => {
-    li = document.createElement("li")
-    li.textContent = n[0]
-    list.appendChild(li)
-  })
-  view.appendChild(list)
-}
-
-function showQuery3() {
-  let view = document.getElementById("queryResult3")
-  while (view.firstChild) {
-    view.removeChild(view.firstChild)
-  }
-  let list = document.createElement("ul")
-  query1Tracks.forEach(n => {
-    li = document.createElement("li")
-    li.textContent = n[0]
-    list.appendChild(li)
-  })
-  view.appendChild(list)
-}
-
 // unused const url = "http://localhost:5000/";
 
 /*
@@ -118,8 +90,8 @@ function getArtist(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
-        listElements = []
-        data.body.forEach(n => listElements.push(n))
+        listElements = new Set()
+        data.body.forEach(n => listElements.add(n))
         console.log(listElements)
         showQuery("1", listElements)
       });
@@ -147,8 +119,8 @@ function getGenre(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
-        listElements = []
-        data.body.forEach(n => listElements.push(n))
+        listElements = new Set()
+        data.body.forEach(n => listElements.add(n))
         console.log(listElements)
         showQuery("2", listElements)
       });
@@ -180,8 +152,8 @@ function getArtists(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
-        listElements = []
-        data.body.forEach(n => listElements.push(n))
+        listElements = new Set()
+        data.body.forEach(n => listElements.add(n))
         console.log(listElements)
         showQuery("3", listElements)
       });
@@ -217,6 +189,12 @@ function putSong(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
+        let result = data.body
+        let view = document.getElementById(`queryResult4`)
+        if (view.firstChild) {
+          view.removeChild(view.firstChild)
+        }
+        view.textContent = result
         console.log(data)
       });
   }
@@ -245,6 +223,12 @@ function deleteSong(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
+        let result = data.body
+        let view = document.getElementById(`queryResult5`)
+        if (view.firstChild) {
+          view.removeChild(view.firstChild)
+        }
+        view.textContent = result
         console.log(data)
       });
   }

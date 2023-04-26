@@ -98,18 +98,18 @@ def query_four():
     # print(body)
     trackId = generateId(16)
     albumId = generateId(16)
-    artistId = []
+    artistId = ""
     cursor = mysql.connection.cursor()
     cursor.execute(''' SELECT artistId FROM Artist WHERE LOWER(artistName) = LOWER(%s)''',(artistName,))
     data = cursor.fetchall()
     cursor.close()
-    if (not data): 
+    if len(data) == 0:
         artistId = generateId(16)
         cursor = mysql.connection.cursor()
         cursor.execute(''' INSERT INTO Artist(artistId, artistName) VALUES(%s, %s); ''', (artistId, artistName))
-        artistId = data[0]
         cursor.close()
-    else: artistId = data[0]
+    else:
+        artistId = data[0]
     print(data)
     cursor = mysql.connection.cursor()
     cursor.execute(''' INSERT INTO Album(albumId, albumName) VALUES(%s, %s);
@@ -119,7 +119,8 @@ def query_four():
                     (albumId, albumName, trackId, trackName, artistId, albumId, artistId, trackId,))
     cursor.close()
     mysql.connection.commit()
-    return f"Track Added."
+    res = {"body": f"Track {trackName} Added."}
+    return json.dumps(res)
 
 @app.route('/query5', methods = ['DELETE'])
 def query_five():
@@ -135,7 +136,8 @@ def query_five():
     data = cursor.fetchall()
     print("data:",data)
     cursor.close()
-    return f"Track Deleted."
+    res = {"body": f"Track {track_name} Deleted."}
+    return json.dumps(res)
 
 
 app.run(host='localhost', port=5000)
