@@ -53,12 +53,6 @@ CREATE TABLE IF NOT EXISTS availableMarkets (
     marketName VARCHAR(255)
 );
 
-DROP TABLE IF EXISTS Genre;
-CREATE TABLE IF NOT EXISTS Genre (
-    genreId VARCHAR(50) NOT NULL PRIMARY KEY,
-    genreName VARCHAR(50)
-);
-
 DROP TABLE IF EXISTS artistsToAlbums;
 CREATE TABLE IF NOT EXISTS artistsToAlbums (
     artistsToAlbumsId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -73,11 +67,11 @@ CREATE TABLE IF NOT EXISTS albumsToTracks (
     trackId VARCHAR(50) REFERENCES Track(id)
 );
 
-DROP TABLE IF EXISTS albumsToGenre;
-CREATE TABLE IF NOT EXISTS albumsToGenre (
-    albumsToGenreId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    albumId VARCHAR(50) REFERENCES Album(id),
-    genreId VARCHAR(50) REFERENCES Genre(id)
+DROP TABLE IF EXISTS artistsToGenre;
+CREATE TABLE IF NOT EXISTS artistsToGenre (
+    artistsToGenreId INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    artistId VARCHAR(50) REFERENCES Album(id),
+    genreName VARCHAR(50)
 );
 
 DROP TABLE IF EXISTS artistsToTracks;

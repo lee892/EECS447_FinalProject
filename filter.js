@@ -76,6 +76,7 @@ function getArtist(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
+        console.log(data)
       });
   }
   else {
@@ -159,10 +160,11 @@ function putSong(form) {
     let temp3Cleaned = temp3.replace(/\s/g, '%20');
     putOptions.body = JSON.stringify(putData);
     console.log("http://localhost:5000/query4?song1=" + temp1Cleaned + "&song2=" + temp2Cleaned + "&song3=" + temp3Cleaned);
-    fetch("http://localhost:5000/query4?song1=" + temp1Cleaned + "&song2=" + temp2Cleaned + "&song3=" + temp3Cleaned, fetchOptions)
+    fetch("http://localhost:5000/query4?song1=" + temp1Cleaned + "&song2=" + temp2Cleaned + "&song3=" + temp3Cleaned, putOptions)
       .then((result) => {
         return result.json();
       }).then((data) => {
+        console.log(data)
       });
   }
   else {
@@ -190,6 +192,7 @@ function deleteSong(form) {
       .then((result) => {
         return result.json();
       }).then((data) => {
+        console.log(data)
       });
   }
   else {

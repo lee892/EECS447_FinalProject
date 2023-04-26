@@ -1,5 +1,6 @@
 from flask import Flask,render_template, request
 from flask_mysqldb import MySQL
+from flask_cors import CORS
 import mysql.connector
 import json
 import os
@@ -14,11 +15,13 @@ if len(sys.argv) > 1 and sys.argv[1] == "init":
     initDB()
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['MYSQL_HOST'] = os.environ["DB_HOSTNAME"]
 app.config['MYSQL_USER'] = os.environ["DB_USER"]
 app.config['MYSQL_PASSWORD'] = os.environ["DB_PASSWORD"]
 app.config['MYSQL_DB'] = os.environ["DB_NAME"]
+app.config['MYSQL_PORT'] = 3306
 
 mysql = MySQL(app)
 
@@ -32,34 +35,39 @@ def getArtists():
     res = {"name": [x[1] for x in data]}
     return json.dumps(res)
 
-@app.route('/query1', methods = ['GET'])
+@app.route('/query1', methods = ['GET', 'POST'])
 def query_one():
     args = request.args
+    print("this method is calling")
     artist = args.get('artist')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT trackName FROM Track NATURAL JOIN artistsToTracks Natural JOIN Artist
-                    WHERE artistName = %s;''',(artist))
+    cursor.execute(f"Select * from Track t1, artistsToTracks t2, Artist a WHERE t1.trackId=t2.trackId and t2.artistId=a.artistId and artistName = '{artist}';")
+    # cursor.execute(''' SELECT * FROM artistsToTracks NATURAL JOIN Track
+    #                 WHERE artistName = %s;''',[artist])
     data = cursor.fetchall()
-    print(data)
+    for d in data:
+        print(d)
     cursor.close()
-    res = {"trackName": [x["trackName"] for x in data]}
+    res = {"name": [x["trackName"] for x in data]}
     return json.dumps(res)
 
-@app.route('/query2', methods = ['GET'])
+@app.route('/query2', methods = ['GET', 'POST'])
 def query_two():
     args = request.args
+    print(args)
     genre = args.get('genre')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT albumName FROM Genre NATURAL JOIN albumsToGenre Natural JOIN Album
-                    WHERE genreName = %s ;''',(genre))
+    cursor.execute(''' SELECT genreName FROM albumsToGenre Natural JOIN Album
+                    WHERE genreName = '%s' ;''',(genre))
     data = cursor.fetchall()
     cursor.close()
     res = {"name": [x[0] for x in data]}
     return json.dumps(res)
 
-@app.route('/query3', methods = ['GET'])
+@app.route('/query3', methods = ['GET', 'POST'])
 def query_three():
     args = request.args
+    print(args)
     artist_1 = args.get('artist_1')
     artist_2 = args.get('artist_2')
     cursor = mysql.connection.cursor()
@@ -76,12 +84,21 @@ def query_three():
 def query_four():
     #{id: 0, data: {"trackName": "hello", "trackId": "randomid"... }}
     body = request.json
-    data = body.data
+    trackName, albumName, artistName = body.data
     # print(type(body))
     # print(body)
-    trackId = generateId()
+    trackId = generateId(16)
+    artistId = generateId(16)
     cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO Track VALUES(%s)''',(data))
+    cursor.execute(''' INSERT INTO Track(trackId, trackName) VALUES('%s', '%s');''',(trackId, trackName))
+    mysql.connection.commit()
+    cursor.close()
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' INSERT INTO Artist(artistId, artistName) VALUES('%s', '%s');''', (artistId, artistName))
+    mysql.connection.commit()
+    cursor.close()
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' INSERT INTO artistsToTracks(artistId, trackId) VALUES('%s', '%s');''', (artistId, trackId))
     mysql.connection.commit()
     cursor.close()
     return f"Track Added."
@@ -92,7 +109,7 @@ def query_five():
     track_name = args.get('trackName')
     cursor = mysql.connection.cursor()
     print(track_name)
-    cursor.execute(''' DELETE FROM Track Where trackName = %s ''', (track_name))
+    cursor.execute(''' DELETE FROM Track Where trackName = '%s' ''', (track_name))
     mysql.connection.commit()
     cursor.close()
     return f"Track Deleted."

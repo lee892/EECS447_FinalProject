@@ -2,13 +2,16 @@ from mysql.connector import connect, Error
 import os
 import dotenv
 import requests
+import time
 
 ARTISTS = [
     "4Z8W4fKeB5YxbusRsdQVPb",
     "53XhwfbYqKCa1cC15pYq2q",
     "6eUKZXaKkcviH0Ku9w2n3V",
-    "4iHNK0tOyZPYnBU7nGAgpQ",
-    "3WrFJ7ztbogyGnTHbHJFl2",
+    "4iHNK0tOyZPYnBU7nGAgpQ"
+    
+]
+'''"3WrFJ7ztbogyGnTHbHJFl2"
     "0L8ExT028jH3ddEcZwqJJ5",
     "6P7H3ai06vU1sGvdpBwDmE",
     "2YZyLoL8N0Wb9xBt1NhZWg",
@@ -19,15 +22,34 @@ ARTISTS = [
     "1YzCsTRb22dQkh9lghPIrp",
     "4F7Q5NV6h5TSwCainz8S5A",
     "5pKCCKE2ajJHZ9KAiaK11H",
-    "3nFkdlSjzX9mRTtwJOzDYB"
-]
+    "3nFkdlSjzX9mRTtwJOzDYB"'''
+
 
 def printDBContents(connection):
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM artistsToAlbums;")
+        cursor.execute("SELECT * FROM Artist;")
         data = cursor.fetchall()
         for d in data:
             print(d)
+
+def makeReq(url, access_token):
+    reqSuccess = False
+    response = None
+    while not reqSuccess:
+        response = requests.get(
+            url,
+            headers={"Authorization": f"Bearer {access_token}"}
+        )
+        if response.status_code == 429:
+            print(response.headers)
+            print(response.headers.get("Retry-After", 0))
+        wait_time = int(response.headers.get("retry-after", 0))
+        if wait_time > 0:
+            print(response.headers)
+            time.sleep(wait_time)
+        else:
+            reqSuccess = True
+    return response.json()
 
 
 def populateDB(connection):
@@ -44,18 +66,15 @@ def populateDB(connection):
         }
     )
     access_token = response.json()["access_token"]
+    print(access_token)
     #Iterate over given list of artists
     for artist in ARTISTS:
         #Get artist's albums
-        albums = requests.get(
-            f"https://api.spotify.com/v1/artists/{artist}/albums",
-            headers={"Authorization": f"Bearer {access_token}"}
-        ).json()["items"]
-        
+        albums = makeReq(f"https://api.spotify.com/v1/artists/{artist}/albums", access_token)["items"]
+
         i = 0
-        while i in range(len(albums)) and i < 4:
+        while i in range(len(albums)) and i < 2:
             albumId = albums[i]["id"]
-            
             #Add album to database
             with connection.cursor() as cursor:
                 albumType = albums[i]["type"]
@@ -71,14 +90,20 @@ def populateDB(connection):
             #Add artist-album relationship
             with connection.cursor() as cursor:
                 cursor.execute(f"INSERT INTO artistsToAlbums(artistId, albumId) \
-                               VALUES('{artist}', '{albumId}')")
-            #Get all tracks of album
-            tracks = requests.get(
-                f"https://api.spotify.com/v1/albums/{albumId}",
-                headers={"Authorization": f"Bearer {access_token}"}
-            ).json()["tracks"]["items"]
+                               VALUES('{artist}', '{albumId}');")
 
-            for track in tracks:
+            #Get album
+            album = makeReq(f"https://api.spotify.com/v1/albums/{albumId}", access_token)
+            #Add genres to database
+            for genre in album["genres"]:
+                print(genre)
+                with connection.cursor() as cursor:
+                    cursor.execute(f"INSERT INTO albumsToGenre(albumId, genreName) \
+                                   VALUES('{albumId}', '{genre}');")
+
+
+            #Iterate over tracks
+            for track in album["tracks"]["items"]:
                 trackId = track["id"]
                 
                 #Add track to database
@@ -93,21 +118,21 @@ def populateDB(connection):
                     uri = track["uri"]
                     cursor.execute(f"INSERT INTO Track(trackId, discNumber, msDuration, isExplicit, trackName, previewUri, trackNum, uri) \
                                 VALUES('{trackId}', {discNumber}, {msDuration}, {isExplicit}, '{trackName}', '{previewUri}', {trackNum}, '{uri}');")
+
                 #Add album-track relationship
                 with connection.cursor() as cursor:
                     cursor.execute(f"INSERT INTO albumsToTracks(albumId, trackId) \
                                 VALUES('{albumId}', '{trackId}');")
+
                 for trackArtist in track["artists"]:
                     trackArtistId = trackArtist["id"]
                     #Get all artist info
-                    artistInfo = requests.get(
-                        f"https://api.spotify.com/v1/artists/{trackArtistId}",
-                        headers={"Authorization": f"Bearer {access_token}"}
-                    ).json()
+                    artistInfo = makeReq(f"https://api.spotify.com/v1/artists/{trackArtistId}", access_token)
+                    
                     #Check if Artist exists
                     existingArtist = False
                     with connection.cursor() as cursor:
-                        cursor.execute(f"SELECT * FROM Artist;")
+                        cursor.execute(f"SELECT * FROM Artist WHERE artistId='{trackArtistId}';")
                         if len(cursor.fetchall()) > 0:
                             existingArtist = True
                     #Add artist if not exists
@@ -120,11 +145,20 @@ def populateDB(connection):
                             uri = artistInfo["uri"]
                             cursor.execute(f"INSERT INTO Artist(artistId, artistName, followerCount, popularity, uri) \
                                         VALUES('{trackArtistId}', '{trackArtistName}', {followerCount}, {popularity}, '{uri}');")
+        
+                        # Add artist genres
+                        for genre in artistInfo["genres"]:
+                            print(genre)
+                            with connection.cursor() as cursor:
+                                cursor.execute(f"INSERT INTO artistsToGenre(artistId, genreName) \
+                                            VALUES('{trackArtistId}', '{genre}');")
+            
 
                     #Add artist-track relationship
                     with connection.cursor() as cursor:
                         cursor.execute(f"INSERT INTO artistsToTracks(artistId, trackId) \
                                     VALUES('{trackArtistId}', '{trackId}');")
+    
             i += 1
 
 
@@ -135,8 +169,9 @@ def initDB():
         with connect(
             host=os.environ["DB_HOSTNAME"],
             user=os.environ["DB_USER"],
-            port=3306,
-            password=os.environ["DB_PASSWORD"]
+            database=os.environ["DB_NAME"],
+            password=os.environ["DB_PASSWORD"],
+            port=3306
         ) as connection:
             #Open .sql file for reading
             fd = open("schemas.sql", "r")
@@ -161,5 +196,7 @@ def initDB():
             print("print db contents for debugging")
             printDBContents(connection)
             print("after print db contents")
+            connection.commit()
+            
     except Error as e:
         print(e)
