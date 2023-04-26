@@ -100,7 +100,7 @@ def query_four():
     albumId = generateId(16)
     artistId = []
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT artistId FROM Artist WHERE artistName = %s''',(artistName,))
+    cursor.execute(''' SELECT artistId FROM Artist WHERE LOWER(artistName) = LOWER(%s)''',(artistName,))
     data = cursor.fetchall()
     cursor.close()
     if (not data): 
@@ -131,7 +131,7 @@ def query_five():
     mysql.connection.commit()
     cursor.close()
     cursor = mysql.connection.cursor()
-    cursor.execute(''' Select * from Track where trackName=%s''', [track_name])
+    cursor.execute(''' Select * from Track where LOWER(trackName)=LOWER(%s)''', [track_name])
     data = cursor.fetchall()
     print("data:",data)
     cursor.close()
