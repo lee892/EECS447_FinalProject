@@ -152,7 +152,6 @@ def populateDB(connection):
                             with connection.cursor() as cursor:
                                 cursor.execute(f"INSERT INTO artistsToGenre(artistId, genreName) \
                                             VALUES('{trackArtistId}', '{genre}');")
-            
 
                     #Add artist-track relationship
                     with connection.cursor() as cursor:
@@ -197,6 +196,6 @@ def initDB():
             printDBContents(connection)
             print("after print db contents")
             connection.commit()
-            
+
     except Error as e:
         print(e)

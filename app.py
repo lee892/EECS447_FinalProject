@@ -88,6 +88,7 @@ def query_three():
 def query_four():
     #{id: 0, data: {"trackName": "hello", "trackId": "randomid"... }}
     args = request.args
+    print(args)
     trackName = args.get("track")
     artistName = args.get("artist")
     albumName = args.get("album")
@@ -97,30 +98,36 @@ def query_four():
     artistId = generateId(16)
     albumId = generateId(16)
     cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO Album(albumId, albumName) VALUES('%s', '%s');''',(albumId, albumName))
-    cursor.close()
-    cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO Track(trackId, trackName) VALUES('%s', '%s');''',(trackId, trackName))
-    cursor.close()
-    cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO Artist(artistId, artistName) VALUES('%s', '%s');''', (artistId, artistName))
-    cursor.close()
-    cursor = mysql.connection.cursor()
-    cursor.execute(''' INSERT INTO artistsToTracks(artistId, trackId) VALUES('%s', '%s');''', (artistId, trackId))
+    cursor.execute(''' INSERT INTO Album(albumId, albumName) VALUES(%s, %s);''',[albumId, albumName])
+    cursor.execute(''' INSERT INTO Track(trackId, trackName) VALUES(%s, %s);''',[trackId, trackName])
+    cursor.execute(''' INSERT INTO Artist(artistId, artistName) VALUES(%s, %s);''', [artistId, artistName])
+    cursor.execute(''' INSERT INTO artistsToTracks(artistId, trackId) VALUES(%s, %s);''', [artistId, trackId])
+    cursor.execute(''' INSERT INTO artistsToAlbums(artistId, albumId) VALUES(%s, %s);''', [artistId, albumId])
     mysql.connection.commit()
     cursor.close()
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' Select * from Track where trackName=%s''', [trackName])
+    data = cursor.fetchall()
+    print(data)
+    cursor.close()
+
     return f"Track Added."
 
 @app.route('/query5', methods = ['DELETE'])
 def query_five():
     args = request.args
-    track_name = args.get('trackName')
+    track_name = args.get('deletion')
     cursor = mysql.connection.cursor()
     print(track_name)
-    cursor.execute(''' DELETE FROM Track Where trackName = '%s' ''', (track_name))
+    cursor.execute(''' DELETE FROM Track Where trackName = %s ''', [track_name])
     mysql.connection.commit()
     cursor.close()
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' Select * from Track where trackName=%s''', [track_name])
+    data = cursor.fetchall()
+    print("data:",data)
+    cursor.close()
     return f"Track Deleted."
-    
+
 
 app.run(host='localhost', port=5000)
