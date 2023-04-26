@@ -98,7 +98,7 @@ function getGenre(form) {
     let tempCleaned = temp.replace(/\s/g, '%20');
     fetchOptions.body = JSON.stringify(userData);
     console.log("http://localhost:5000/query2?genre=" + tempCleaned);
-    fetch("http://localhost:5000/path?query2=" + tempCleaned, fetchOptions)
+    fetch("http://localhost:5000/query2?genre=" + tempCleaned, fetchOptions)
       .then((result) => {
         return result.json();
       }).then((data) => {

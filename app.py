@@ -38,30 +38,29 @@ def getArtists():
 @app.route('/query1', methods = ['GET', 'POST'])
 def query_one():
     args = request.args
-    print("this method is calling")
     artist = args.get('artist')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT artistName FROM Track 
-	NATURAL JOIN albumsToTracks NATURAL JOIN artistsToAlbums
-	INNER JOIN Artist ON 
-	artistsToAlbums.artistId=Artist.artistId WHERE artistName = %s;''',(artist,))
+    cursor.execute(''' SELECT discNumber, msDuration, isExplicit, trackName, previewUri
+        FROM Track NATURAL JOIN artistsToTracks INNER JOIN Artist ON 
+        artistsToTracks.artistId=Artist.artistId WHERE artistName = %s;''',[artist])
     data = cursor.fetchall()
     for d in data:
         print(d)
     cursor.close()
-    res = {"name": [x["trackName"] for x in data]}
+    res = {"name": [x[0] for x in data]}
     return json.dumps(res)
 
 @app.route('/query2', methods = ['GET', 'POST'])
 def query_two():
     args = request.args
-    print(args)
     genre = args.get('genre')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT genreName FROM albumsToGenre Natural JOIN Album
-                    WHERE genreName = '%s' ;''',(genre))
+    cursor.execute(''' SELECT artistName, followerCount, popularity FROM artistsToGenre Natural JOIN Artist
+                    WHERE genreName = %s;''',[genre])
     data = cursor.fetchall()
     cursor.close()
+    for d in data:
+        print(d)
     res = {"name": [x[0] for x in data]}
     return json.dumps(res)
 
@@ -72,12 +71,19 @@ def query_three():
     artist_1 = args.get('artist_1')
     artist_2 = args.get('artist_2')
     cursor = mysql.connection.cursor()
-    cursor.execute(''' SELECT albumName FROM (Artist NATURAL JOIN artistsToAlbums NATURAL JOIN Album) as a1,
-                    (Artist NATURAL JOIN artistsToAlbums NATURAL JOIN Album) as a2
-                    WHERE a1.artistName = '%s' AND a2.artistName = '%s';''',
-                    (artist_1,artist_2))
+    cursor.execute(''' SELECT a5.albumName, a6.albumName FROM Artist a1, Artist a2,
+                    artistsToAlbums a3, artistsToAlbums a4,
+                    Album a5, Album a6
+                    WHERE a1.artistName = %s AND a2.artistName = %s
+                    AND a1.artistId = a3.artistId
+                    AND a2.artistId = a4.artistId
+                    AND a3.albumId = a5.albumId
+                    AND a4.albumId = a6.albumId;''',
+                    [artist_1,artist_2])
     cursor.close()
     data = cursor.fetchall()
+    for d in data:
+        print(d)
     res = {"name": [x[0] for x in data]}
     return json.dumps(res)
 
@@ -90,13 +96,15 @@ def query_four():
     # print(body)
     trackId = generateId(16)
     artistId = generateId(16)
+    albumId = generateId(16)
+    cursor = mysql.connection.cursor()
+    cursor.execute(''' INSERT INTO Album(albumId, albumName) VALUES('%s', '%s');''',(albumId, albumName))
+    cursor.close()
     cursor = mysql.connection.cursor()
     cursor.execute(''' INSERT INTO Track(trackId, trackName) VALUES('%s', '%s');''',(trackId, trackName))
-    mysql.connection.commit()
     cursor.close()
     cursor = mysql.connection.cursor()
     cursor.execute(''' INSERT INTO Artist(artistId, artistName) VALUES('%s', '%s');''', (artistId, artistName))
-    mysql.connection.commit()
     cursor.close()
     cursor = mysql.connection.cursor()
     cursor.execute(''' INSERT INTO artistsToTracks(artistId, trackId) VALUES('%s', '%s');''', (artistId, trackId))
