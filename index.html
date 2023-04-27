@@ -22,7 +22,7 @@
     <button class="button" type="button" onclick="choice5()">Choice 5</button>
 
     <div id="firstChoice" >
-
+        <h2>Songs from an Artist</h2>
         <form id="artist" onsubmit="formSubmitHandler(event)">
             <input placeholder="Artist" style="margin-left:2%" name="part_1" onfocus="this.value=''">
             <button class="button-18">Submit</button>
@@ -33,6 +33,7 @@
     </div>
 
     <div id="secondChoice" style="display:none;">
+        <h2>Artists from a Genre</h2>
         <form id="genre" onsubmit="formSubmitHandler(event)">
             <input placeholder="Genre" style="margin-left:2%" name="part_1" onfocus="this.value=''">
             <button class="button-18">Submit</button>
@@ -43,9 +44,10 @@
     </div>
 
     <div id="thirdChoice" style="display:none;">
+        <h2>Songs that Feature 2 Artists</h2>
         <form id="artists" onsubmit="formSubmitHandler(event)">
-            <p>Please input Artist 1<input placeholder="Artist1" style="margin-left:2%" name="part_1" onfocus="this.value=''"></p>
-            <p>Please input Artist 2<input placeholder="Artist2" style="margin-left:2%" name="part_2" onfocus="this.value=''"></p>
+            <input placeholder="Artist1" style="margin-left:2%" name="part_1" onfocus="this.value=''">
+            <input placeholder="Artist2" style="margin-left:2%" name="part_2" onfocus="this.value=''">
             <button class="button-18">Submit</button>
         </form>
         <h2>Songs</h2>
@@ -54,6 +56,7 @@
     </div>
 
     <div id="fourthChoice" style="display:none;">
+        <h2>Add Song</h2>
         <form id="addSong" onsubmit="formSubmitHandler(event)">
             <input placeholder="Track" style="margin-left:2%" name="part_1" onfocus="this.value=''">
             <input placeholder="Artist" style="margin-left:2%" name="part_2" onfocus="this.value=''">
@@ -65,8 +68,9 @@
     </div>
 
     <div id="fifthChoice" style="display:none;">
+        <h2>Delete Song</h2>
         <form id="deleteSong" onsubmit="formSubmitHandler(event)">
-            <p>What song do you want to delete?<input placeholder="Song" style="margin-left:2%" name="part_1"></p>
+            <input placeholder="Song" style="margin-left:2%" name="part_1">
             <button class="button-18">Submit</button>
         <form>
         <div id="queryResult5">
