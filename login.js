@@ -38,7 +38,7 @@ function login(form){
         .then((result) => {
         return result.json();
         }).then((data) => {
-
+                    //if successful go to index.html
         });
     }
 }
@@ -58,7 +58,9 @@ function create(form){
         .then((result) => {
         return result.json();
         }).then((data) => {
-
+                // if successful go back to login
+                // document.getElementById('login-form-wrap').style.display = "block";
+                // document.getElementById('create-form-wrap').style.display ="none";
         });
     }
 }
