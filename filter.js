@@ -1,9 +1,18 @@
 //filter.js is the front end driver file that is invoked from the index.html file.
 
-//initilizaing empty objects for json  
+//initilizaing empty objects for json 
+let mySongs = new Set()
 let userData = {}
 let deleteData = {}
 let putData = {}
+let isStorable = storageAvailable('localStorage')
+if (storageAvailable) {
+  getUserStorage()
+
+}
+
+
+
 
 let query1Tracks = []
 let query2Albums = []
@@ -174,6 +183,10 @@ function putSong(form) {
   console.log(form.part_2.value)
   console.log(form.part_3.value)
   if (form.part_1.value != "" && form.part_2.value != "" && form.part_3.value != "") {
+    if (isStorable) {
+      addStoredSong(form.part_1.value)
+      console.log("song added to localstorage")
+    }
     putData.track = form.part_1.value;
     putData.artist = form.part_2.value;
     putData.album = form.part_2.value;
@@ -214,6 +227,16 @@ function deleteSong(form) {
   console.log("deleteSong Function")
   console.log(form.part_1.value)
   if (form.part_1.value != "") {
+    if (isStorable ) {
+      if (!mySongs.has(form.part_1.value)) {
+        alert("Error: Permission Denied, Not Song User Added")
+        return;
+      } 
+      deleteStoredSong(form.part_1.value)
+      showStoredSongs()
+    }
+
+    
     deleteData.deletion = form.part_1.value
     deleteOption.body = JSON.stringify(deleteData);
     let temp = form.part_1.value;
@@ -306,8 +329,71 @@ function choice5() {
   document.getElementById('thirdChoice').style.display = "none";
   document.getElementById('fourthChoice').style.display = "none";
   document.getElementById('fifthChoice').style.display = "block";
+
+  if (isStorable) {
+    console.log('djlkdjss')
+    showStoredSongs()
+  }
+}
+
+// Session
+
+function storageAvailable(type) {
+  var storage;
+  try {
+      storage = window[type];
+      var x = '__storage_test__';
+      storage.setItem(x, x);
+      storage.removeItem(x);
+      return true;
+  }
+  catch(e) {
+      return e instanceof DOMException && (
+          // everything except Firefox
+          e.code === 22 ||
+          // Firefox
+          e.code === 1014 ||
+          // test name field too, because code might not be present
+          // everything except Firefox
+          e.name === 'QuotaExceededError' ||
+          // Firefox
+          e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+          // acknowledge QuotaExceededError only if there's something already stored
+          (storage && storage.length !== 0);
+  }
+}
+
+function getUserStorage() {
+  var currentStorage = JSON.parse(localStorage.getItem("mySongs"));
+  let tempSet = new Set()
+  for (let i in currentStorage)
+    tempSet.add(currentStorage[i])
+  mySongs = tempSet
+}
+
+function addStoredSong(song) {
+  mySongs.add(song)
+  localStorage.setItem("mySongs", JSON.stringify([...mySongs]))
+}
+
+function showStoredSongs() {
   let view = document.getElementById(`queryResult5`)
+  console.log(view)
   while (view.firstChild) {
     view.removeChild(view.firstChild)
   }
+  let list = document.createElement("ul")
+  let iterStorage = [...mySongs]
+  iterStorage.forEach(song => {
+    li = document.createElement("li")
+    li.textContent = song
+    list.appendChild(li)
+  })
+  view.appendChild(list)
+  console.log(view)
+}
+
+function deleteStoredSong(song) {
+  mySongs.delete(song)
+  localStorage.setItem("mySongs", JSON.stringify([...mySongs]))
 }
